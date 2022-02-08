@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+spring:
+  r2dbc:
+    url: r2dbc:pool:postgresql://localhost:5435/health-monitoring
+    username: postgres
+    password: password
+    properties:
+      lock_timeout: 40000
+      statement_timeout: 40000
+      idle_in_transaction_session_timeout: 40000
+      connectTimeout: PT55S
+  main:
+    allow-bean-definition-overriding: true
+
+r2dbc:
+  migrate:
+    resources-paths:
+      - classpath:/db/migration/*.sql
