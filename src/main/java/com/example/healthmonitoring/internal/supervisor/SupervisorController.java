@@ -22,4 +22,9 @@ public class SupervisorController {
         }
         return "login";
     }
+
+    @GetMapping("/login")
+    public String redirectLogin() {
+        return "login";
+    }
 }

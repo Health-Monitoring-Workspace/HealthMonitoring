@@ -142,6 +142,13 @@ label:hover::before {
     background: #00dea7;
 }
 
+.error{
+    font-family: FontAwesome;
+    color:dimgray;
+    font-size: 15px;
+    padding-left: 12px;
+}
+
 label:hover::before .text-checkbox {
     background: #00dea7;
 }

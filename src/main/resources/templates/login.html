@@ -6,6 +6,24 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <link href="http://fonts.googleapis.com/css?family=Lato"
+          rel="stylesheet" type="text/css"/>
+    <link href="http://fonts.googleapis.com/css?family=Montserrat"
+          rel="stylesheet" type="text/css"/>
+    <link
+            href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+            th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
+            rel="stylesheet" media="screen"/>
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/3.6.0/jquery.min.js"
+            th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+
+    <script src="../static/js/bootstrap.min.js"
+            th:src="@{~/js/bootstrap.min.js}"></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+
+
 
 </head>
 <body>
@@ -22,15 +40,18 @@
     <div class="right">
         <h5>Login</h5>
         <form action="#" method="post" th:action="@{/login}" th:object="${loginData}">
-        <div class="inputs">
-            <input id="username" name="username" th:required="required" th:value="${username}" type="text" placeholder="username">
+            <div class="inputs">
+                <input id="username" name="username" th:required="required" th:value="${username}" type="text"
+                       placeholder="username">
+                <br>
+                <input id="password" name="password" th:required="required" th:value="${password}" type="password"
+                       placeholder="password">
+            </div>
             <br>
-            <input id="password" name="password" th:required="required" th:value="${password}" type="password" placeholder="password">
-        </div>
-
-        <br><br>
-        <br>
-        <button type="submit">Login</button>
+            <span class="error" th:if="${param.error}" th:text="${param.error}"></span>
+            <br>
+            <br>
+            <button type="submit">Login</button>
         </form>
     </div>
 
