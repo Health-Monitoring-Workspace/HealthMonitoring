@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page in HTML with CSS Code Example</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+
+</head>
+<body>
+
+<div class="box-form">
+    <div class="left">
+        <div class="overlay">
+            <h1>HealthMO</h1>
+            <p>Health monitoring application destined for medical staff. Please use your credentials to log in.</p>
+        </div>
+    </div>
+
+
+    <div class="right">
+        <h5>Login</h5>
+        <form action="#" method="post" th:action="@{/login}" th:object="${loginData}">
+        <div class="inputs">
+            <input id="username" name="username" th:required="required" th:value="${username}" type="text" placeholder="username">
+            <br>
+            <input id="password" name="password" th:required="required" th:value="${password}" type="password" placeholder="password">
+        </div>
+
+        <br><br>
+        <br>
+        <button type="submit">Login</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

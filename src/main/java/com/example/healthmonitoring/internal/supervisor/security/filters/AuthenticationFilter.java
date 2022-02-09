@@ -1,6 +1,5 @@
 package com.example.healthmonitoring.internal.supervisor.security.filters;
 
-import com.example.healthmonitoring.common.domain.entity.Supervisor;
 import com.example.healthmonitoring.internal.supervisor.security.jwt.JwtUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -37,9 +37,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException {
-        String token = jwtUtil.generateToken(((Supervisor) auth.getPrincipal()));
+        String token = jwtUtil.generateToken(((UserDetails) auth.getPrincipal()));
         res.addCookie(new Cookie("token", token));
-//        res.sendRedirect("/mainPage");
+        res.sendRedirect("/dashboard");
     }
 
     @Override

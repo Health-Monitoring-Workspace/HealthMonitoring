@@ -1,27 +1,26 @@
 package com.example.healthmonitoring.internal.supervisor;
 
-import com.example.healthmonitoring.internal.supervisor.service.SupervisorDetailsService;
+import com.example.healthmonitoring.internal.supervisor.security.utils.AuthenticationUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
 
 @Slf4j
-@RestController
-@RequestMapping("/")
+@Controller
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SupervisorController {
 
-    SupervisorDetailsService detailsService;
-
     @GetMapping("/")
-    public Mono<UserDetails> get() {
-        return detailsService.findByUsername("patricia.burtic@gmail.com");
+    public String login() {
+        log.info("Enter login with {}", AuthenticationUtils.getLoggedInUser().getId());
+        if (AuthenticationUtils.getLoggedInUser().getId() != null) {
+            return "/dashboard";
+        }
+        return "login";
     }
 }

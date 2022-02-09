@@ -1,13 +1,13 @@
 package com.example.healthmonitoring.internal.supervisor.security.filters;
 
 import com.example.healthmonitoring.internal.supervisor.security.jwt.JwtUtils;
-import com.example.healthmonitoring.internal.supervisor.service.SupervisorDetailsService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,7 +27,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
     JwtUtils jwtUtil;
 
-    SupervisorDetailsService detailsService;
+    UserDetailsService detailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -45,7 +45,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         if (jwt != null) {
             String username = jwtUtil.extractUsername(jwt);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails user = detailsService.findByUsername(username).block();
+                UserDetails user = detailsService.loadUserByUsername(username);
                 boolean validToken = jwtUtil.validateToken(jwt, user);
                 if (validToken) {
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
