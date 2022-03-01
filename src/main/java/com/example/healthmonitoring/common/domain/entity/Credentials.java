@@ -1,7 +1,9 @@
 package com.example.healthmonitoring.common.domain.entity;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Value;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +16,7 @@ import java.util.UUID;
 @Table("credentials")
 @Builder(toBuilder = true)
 @Value
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Credentials implements UserDetails {
 
     @Id

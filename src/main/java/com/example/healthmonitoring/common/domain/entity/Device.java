@@ -10,19 +10,22 @@ import org.springframework.data.relational.core.mapping.Table;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-@Table("supervisors")
+@Table("devices")
 @Builder(toBuilder = true)
 @Value
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Supervisor {
+public class Device {
 
     @NotNull
     @Id
     UUID id;
 
-    @NotNull
-    String fullName;
+    String imei;
 
-    @NotNull
-    String email;
+    String brand;
+
+    String model;
+
+    UUID patient;
+
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>HealthMO</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <link href="http://fonts.googleapis.com/css?family=Lato"
+          rel="stylesheet" type="text/css"/>
+    <link href="http://fonts.googleapis.com/css?family=Montserrat"
+          rel="stylesheet" type="text/css"/>
+    <link
+            href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+            th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
+            rel="stylesheet" media="screen"/>
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/3.6.0/jquery.min.js"
+            th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+
+    <script src="../static/js/bootstrap.min.js"
+            th:src="@{~/js/bootstrap.min.js}"></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+
+
+
+</head>
+<body>
+
+<div class="box-form">
+    <div class="right">
+        <h5>Add new patient</h5>
+        <form action="#" method="post" th:action="@{/addPatient}" th:object="${patientForm}">
+            <div class="inputs">
+                <input id="patientFullName" name="patientFullName" th:required="required" th:value="${patientFullName}" type="text"
+                       placeholder="Patient full name">
+                <input id="patientEmail" name="patientEmail" th:required="required" th:value="${patientEmail}" type="email"
+                       placeholder="patientEmail">
+                <input id="patientPhoneNumber" name="patientPhoneNumber" th:required="required" th:value="${patientPhoneNumber}" type="text"
+                       placeholder="patientPhoneNumber">
+                <input id="patientCNP" name="patientCNP" th:required="required" th:value="${patientCNP}" type="text"
+                       placeholder="patientCNP">
+                <input id="patientHomeAddress" name="patientHomeAddress" th:required="required" th:value="${patientHomeAddress}" type="text"
+                       placeholder="patientHomeAddress">
+                <hr>
+                <input id="deviceIMEI" name="deviceIMEI" th:required="required" th:value="${deviceIMEI}" type="text"
+                       placeholder="deviceIMEI">
+                <input id="deviceBrand" name="deviceBrand" th:required="required" th:value="${deviceBrand}" type="text"
+                       placeholder="deviceBrand">
+                <input id="deviceModel" name="deviceModel" th:required="required" th:value="${deviceModel}" type="text"
+                       placeholder="deviceModel">
+                <hr>
+                <input id="diseases" name="diseases" th:required="required" th:value="${diseases}" type="text"
+                       placeholder="diseases">
+                <input id="treatments" name="treatments" th:required="required" th:value="${treatments}" type="text"
+                       placeholder="treatments">
+                <input id="otherDetails" name="otherDetails" th:required="required" th:value="${otherDetails}" type="text"
+                       placeholder="otherDetails">
+                <hr>
+                <input id="emergencyContactFullName" name="emergencyContactFullName" th:required="required" th:value="${emergencyContactFullName}" type="text"
+                       placeholder="emergencyContactFullName">
+                <input id="emergencyContactPhoneNumber" name="emergencyContactPhoneNumber" th:required="required" th:value="${emergencyContactPhoneNumber}" type="text"
+                       placeholder="emergencyContactPhoneNumber">
+                <input id="emergencyContactRelationship" name="emergencyContactRelationship" th:required="required" th:value="${emergencyContactRelationship}" type="text"
+                       placeholder="emergencyContactRelationship">
+            </div>
+            <br>
+            <span class="error" th:if="${param.error}" th:text="${param.error}"></span>
+            <br>
+            <br>
+            <button type="submit">ADD</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>
