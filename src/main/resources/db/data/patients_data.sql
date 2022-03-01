@@ -1,0 +1,4 @@
+INSERT INTO public.devices (id, imei, brand, model, patient) VALUES ('34d3d939-3500-48d3-8881-1ca6454d13b6', 'XL3189203', 'Apple', 'Series 4', '62a383bd-02dd-46c2-97fa-a1c1c333c297');
+INSERT INTO public.emergency_contacts (id, name, phone_number, relationship, patient) VALUES ('3296feae-31ee-4a57-99dc-d00db4b49a64', 'Alexandra Burtic', '0729400444', 'sister', '62a383bd-02dd-46c2-97fa-a1c1c333c297');
+INSERT INTO public.medical_records (id, diseases, treatments, details, patient) VALUES ('77102180-afca-4b63-8255-86e45c48a2fb', 'none', 'none', 'none', '62a383bd-02dd-46c2-97fa-a1c1c333c297');
+INSERT INTO public.patients (id, name, email, phone_number, cnp, home_address, created_at, supervisor) VALUES ('62a383bd-02dd-46c2-97fa-a1c1c333c297', 'Patricia Burtic', 'patricia.burtic@gmail.com', '0731346270', '6001112055061', 'Strada Sofiei 14A', '2022-03-01 20:08:48.340209', '1488ad1e-987f-11ec-b909-0242ac120002');
