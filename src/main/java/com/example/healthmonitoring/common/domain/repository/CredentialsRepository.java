@@ -13,4 +13,6 @@ public interface CredentialsRepository extends ReactiveCrudRepository<Credential
 
     Mono<UserDetails> findByUsername(final String username);
 
+    Mono<Boolean> existsByUsername(final String username);
+
 }

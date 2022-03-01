@@ -18,6 +18,10 @@ public class CredentialsDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findByUsername(username).block();
+        if (repository.existsByUsername(username).block()) {
+            return repository.findByUsername(username).block();
+        } else {
+            throw new UsernameNotFoundException("Bad credentials!");
+        }
     }
 }
