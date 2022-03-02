@@ -28,42 +28,43 @@
 </head>
 <body>
 
-<div class="box-form">
-    <div class="right">
+<div class="box-form-add-patient">
+    <div class="form">
         <h5>Add new patient</h5>
         <form action="#" method="post" th:action="@{/addPatient}" th:object="${patientForm}">
             <div class="inputs">
+                <h6>Patient details</h6>
                 <input id="patientFullName" name="patientFullName" th:required="required" th:value="${patientFullName}" type="text"
-                       placeholder="Patient full name">
+                       placeholder="Full name*">
                 <input id="patientEmail" name="patientEmail" th:required="required" th:value="${patientEmail}" type="email"
-                       placeholder="patientEmail">
+                       placeholder="Email*">
                 <input id="patientPhoneNumber" name="patientPhoneNumber" th:required="required" th:value="${patientPhoneNumber}" type="text"
-                       placeholder="patientPhoneNumber">
+                       placeholder="Phone number*">
                 <input id="patientCNP" name="patientCNP" th:required="required" th:value="${patientCNP}" type="text"
-                       placeholder="patientCNP">
+                       placeholder="CNP*">
                 <input id="patientHomeAddress" name="patientHomeAddress" th:required="required" th:value="${patientHomeAddress}" type="text"
-                       placeholder="patientHomeAddress">
-                <hr>
+                       placeholder="Home address*">
+                <h6>Device details</h6>
                 <input id="deviceIMEI" name="deviceIMEI" th:required="required" th:value="${deviceIMEI}" type="text"
-                       placeholder="deviceIMEI">
+                       placeholder="IMEI*">
                 <input id="deviceBrand" name="deviceBrand" th:required="required" th:value="${deviceBrand}" type="text"
-                       placeholder="deviceBrand">
+                       placeholder="Brand*">
                 <input id="deviceModel" name="deviceModel" th:required="required" th:value="${deviceModel}" type="text"
-                       placeholder="deviceModel">
-                <hr>
-                <input id="diseases" name="diseases" th:required="required" th:value="${diseases}" type="text"
-                       placeholder="diseases">
-                <input id="treatments" name="treatments" th:required="required" th:value="${treatments}" type="text"
-                       placeholder="treatments">
-                <input id="otherDetails" name="otherDetails" th:required="required" th:value="${otherDetails}" type="text"
-                       placeholder="otherDetails">
-                <hr>
+                       placeholder="Model*">
+                <h6>Medical record</h6>
+                <input id="diseases" name="diseases" th:value="${diseases}" type="text"
+                       placeholder="Diseases">
+                <input id="treatments" name="treatments" th:value="${treatments}" type="text"
+                       placeholder="Treatments">
+                <input id="otherDetails" name="otherDetails" th:value="${otherDetails}" type="text"
+                       placeholder="Other details">
+                <h6>Emergency contact</h6>
                 <input id="emergencyContactFullName" name="emergencyContactFullName" th:required="required" th:value="${emergencyContactFullName}" type="text"
-                       placeholder="emergencyContactFullName">
+                       placeholder="Full name*">
                 <input id="emergencyContactPhoneNumber" name="emergencyContactPhoneNumber" th:required="required" th:value="${emergencyContactPhoneNumber}" type="text"
-                       placeholder="emergencyContactPhoneNumber">
-                <input id="emergencyContactRelationship" name="emergencyContactRelationship" th:required="required" th:value="${emergencyContactRelationship}" type="text"
-                       placeholder="emergencyContactRelationship">
+                       placeholder="Phone number*">
+                <input id="emergencyContactRelationship" name="emergencyContactRelationship" th:value="${emergencyContactRelationship}" type="text"
+                       placeholder="Relationship">
             </div>
             <br>
             <span class="error" th:if="${param.error}" th:text="${param.error}"></span>
