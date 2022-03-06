@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Service
@@ -33,18 +35,20 @@ public class SupervisorService {
     SupervisorRepository supervisorRepository;
 
     public Mono<Boolean> addPatient(@NotNull PatientDTO patientDTO, @NotNull SupervisorDTO principal) {
-        return patientRepository.save(
-                Patient.builder()
-                        .name(patientDTO.getPatientFullName())
-                        .CNP(patientDTO.getPatientCNP())
-                        .email(patientDTO.getPatientEmail())
-                        .homeAddress(patientDTO.getPatientHomeAddress())
-                        .phoneNumber(patientDTO.getPatientPhoneNumber())
-                        .supervisor(principal.getId())
-                        .build()
-        )
-                .flatMap(patient -> persistDetails(patient, patientDTO))
-                .then(Mono.just(Boolean.TRUE));
+        return
+                patientRepository.save(
+                        Patient.builder()
+                                .name(patientDTO.getPatientFullName())
+                                .CNP(patientDTO.getPatientCNP())
+                                .email(patientDTO.getPatientEmail())
+                                .homeAddress(patientDTO.getPatientHomeAddress())
+                                .phoneNumber(patientDTO.getPatientPhoneNumber())
+                                .birthDate(LocalDate.parse(patientDTO.getPatientBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                                .supervisor(principal.getId())
+                                .build()
+                )
+                        .flatMap(patient -> persistDetails(patient, patientDTO))
+                        .then(Mono.just(Boolean.TRUE));
     }
 
     private Mono<Patient> persistDetails(Patient patient, PatientDTO patientDTO) {
