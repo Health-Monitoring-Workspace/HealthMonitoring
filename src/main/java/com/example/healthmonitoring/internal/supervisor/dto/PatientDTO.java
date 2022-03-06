@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Builder(toBuilder = true)
 @Getter
@@ -32,6 +33,9 @@ public class PatientDTO {
     @NotNull
     @NotBlank
     String patientHomeAddress;
+
+    @NotNull
+    String patientBirthDate;
 
     @NotNull
     @NotBlank

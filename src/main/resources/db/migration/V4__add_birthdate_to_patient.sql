@@ -1,0 +1,1 @@
+alter table if exists patients add column birth_date date;

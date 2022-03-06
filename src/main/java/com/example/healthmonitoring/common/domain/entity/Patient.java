@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -31,6 +32,8 @@ public class Patient {
     String CNP;
 
     String homeAddress;
+
+    LocalDate birthDate;
 
     UUID supervisor;
 

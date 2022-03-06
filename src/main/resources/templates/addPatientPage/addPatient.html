@@ -32,6 +32,7 @@
     <div class="form">
         <h5>Add new patient</h5>
         <form action="#" method="post" th:action="@{/addPatient}" th:object="${patientForm}">
+            <span class="error" th:if="${param.error}" th:text="${param.error}"></span>
             <div class="inputs">
                 <h6>Patient details</h6>
                 <input id="patientFullName" name="patientFullName" th:required="required" th:value="${patientFullName}" type="text"
@@ -42,6 +43,8 @@
                        placeholder="Phone number*">
                 <input id="patientCNP" name="patientCNP" th:required="required" th:value="${patientCNP}" type="text"
                        placeholder="CNP*">
+                <input id="patientBirthDate" name="patientBirthDate" th:required="required" th:value="${patientBirthDate}" type="date"
+                       placeholder="Date of birth*">
                 <input id="patientHomeAddress" name="patientHomeAddress" th:required="required" th:value="${patientHomeAddress}" type="text"
                        placeholder="Home address*">
                 <h6>Device details</h6>

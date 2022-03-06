@@ -9,9 +9,11 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Controller
@@ -38,12 +40,31 @@ public class SupervisorController {
     @GetMapping("/addPatient")
     public String addPatientForm(Model model) {
         model.addAttribute("patientForm", PatientDTO.builder().build());
+
         return "addPatientPage/addPatient";
     }
 
     @PostMapping("/addPatient")
-    public String addPatientSubmission(@ModelAttribute("patientForm") PatientDTO patientDTO) {
-        supervisorService.addPatient(patientDTO, AuthenticationUtils.getLoggedInUser()).subscribe();
+    public String addPatientSubmission(@ModelAttribute("patientForm") PatientDTO patientDTO, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("patientForm", PatientDTO.builder().build());
+
+            return "addPatientPage/addPatient";
+        }
+        supervisorService.addPatient(patientDTO, AuthenticationUtils.getLoggedInUser())
+                .subscribe(
+                (n) -> {
+                },
+                (t) -> {
+                    log.error(
+                            "Exception while persisting patient for user {}",
+                            patientDTO,
+                            t);
+                    model.addAttribute("patientForm", PatientDTO.builder().build());
+                }
+
+        );
+
         return "addPatientPage/addPatient";
     }
 }
