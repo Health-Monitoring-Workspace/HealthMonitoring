@@ -1,6 +1,7 @@
 package com.example.healthmonitoring.internal.supervisor;
 
 import com.example.healthmonitoring.internal.supervisor.dto.PatientDTO;
+import com.example.healthmonitoring.internal.supervisor.dto.VitalSignsDTO;
 import com.example.healthmonitoring.internal.supervisor.security.utils.AuthenticationUtils;
 import com.example.healthmonitoring.internal.supervisor.service.SupervisorService;
 import lombok.AccessLevel;
@@ -13,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -53,18 +55,25 @@ public class SupervisorController {
         }
         supervisorService.addPatient(patientDTO, AuthenticationUtils.getLoggedInUser())
                 .subscribe(
-                (n) -> {
-                },
-                (t) -> {
-                    log.error(
-                            "Exception while persisting patient for user {}",
-                            patientDTO,
-                            t);
-                    model.addAttribute("patientForm", PatientDTO.builder().build());
-                }
+                        (n) -> {
+                        },
+                        (t) -> {
+                            log.error(
+                                    "Exception while persisting patient for user {}",
+                                    patientDTO,
+                                    t);
+                            model.addAttribute("patientForm", PatientDTO.builder().build());
+                        }
 
-        );
+                );
 
         return "addPatientPage/addPatient";
     }
+
+    @PostMapping("/vital-signs")
+    public Mono<Boolean> ingestVitalSigns(@RequestBody VitalSignsDTO vitalSignsDTO) {
+        log.info("Trying to ingest vitals {}", vitalSignsDTO);
+        return supervisorService.persistVitalSigns(vitalSignsDTO);
+    }
+
 }
