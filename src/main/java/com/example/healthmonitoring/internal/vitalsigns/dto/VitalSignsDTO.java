@@ -1,13 +1,11 @@
-package com.example.healthmonitoring.internal.supervisor.dto;
+package com.example.healthmonitoring.internal.vitalsigns.dto;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
+@ToString
 @Builder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class VitalSignsDTO {

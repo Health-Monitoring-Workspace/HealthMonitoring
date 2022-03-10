@@ -1,7 +1,6 @@
 package com.example.healthmonitoring.internal.supervisor;
 
 import com.example.healthmonitoring.internal.supervisor.dto.PatientDTO;
-import com.example.healthmonitoring.internal.supervisor.dto.VitalSignsDTO;
 import com.example.healthmonitoring.internal.supervisor.security.utils.AuthenticationUtils;
 import com.example.healthmonitoring.internal.supervisor.service.SupervisorService;
 import lombok.AccessLevel;
@@ -14,8 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @Controller
@@ -68,12 +65,6 @@ public class SupervisorController {
                 );
 
         return "addPatientPage/addPatient";
-    }
-
-    @PostMapping("/vital-signs")
-    public Mono<Boolean> ingestVitalSigns(@RequestBody VitalSignsDTO vitalSignsDTO) {
-        log.info("Trying to ingest vitals {}", vitalSignsDTO);
-        return supervisorService.persistVitalSigns(vitalSignsDTO);
     }
 
 }

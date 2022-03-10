@@ -1,7 +1,7 @@
-package com.example.healthmonitoring.internal.supervisor.mapper;
+package com.example.healthmonitoring.internal.vitalsigns.mapper;
 
 import com.example.healthmonitoring.common.domain.entity.Event;
-import com.example.healthmonitoring.internal.supervisor.dto.VitalSignsDTO;
+import com.example.healthmonitoring.internal.vitalsigns.dto.VitalSignsDTO;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 
@@ -24,7 +24,8 @@ public class VitalSignsMapper {
                 Stream.of(
                         pulseEvent(vitalSignsDTO, deviceId),
                         bloodPressureEvent(vitalSignsDTO, deviceId),
-                        oxygenInBloodEvent(vitalSignsDTO, deviceId)
+                        oxygenInBloodEvent(vitalSignsDTO, deviceId),
+                        bodyTemperatureEvent(vitalSignsDTO, deviceId)
                 )
                         .filter(Objects::nonNull)
                         .flatMap(Function.identity())

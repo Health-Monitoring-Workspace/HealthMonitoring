@@ -7,8 +7,6 @@ import com.example.healthmonitoring.common.domain.entity.Patient;
 import com.example.healthmonitoring.common.domain.repository.*;
 import com.example.healthmonitoring.internal.supervisor.dto.PatientDTO;
 import com.example.healthmonitoring.internal.supervisor.dto.SupervisorDTO;
-import com.example.healthmonitoring.internal.supervisor.dto.VitalSignsDTO;
-import com.example.healthmonitoring.internal.supervisor.mapper.VitalSignsMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -34,8 +32,6 @@ public class SupervisorService {
 
     DeviceRepository deviceRepository;
 
-    EventRepository eventRepository;
-
     public Mono<Boolean> addPatient(@NotNull PatientDTO patientDTO, @NotNull SupervisorDTO principal) {
         return
                 patientRepository.save(
@@ -53,11 +49,7 @@ public class SupervisorService {
                         .then(Mono.just(Boolean.TRUE));
     }
 
-    public Mono<Boolean> persistVitalSigns(@NotNull VitalSignsDTO vitalSignsDTO) {
-        return deviceRepository.findByImei(vitalSignsDTO.getDeviceIMEI())
-                .flatMap(device -> eventRepository.saveAll(VitalSignsMapper.mapVitalSignsDtoToEvents(vitalSignsDTO, device.getId())).then())
-                .then(Mono.just(Boolean.TRUE));
-    }
+
 
     private Mono<Patient> persistDetails(Patient patient, PatientDTO patientDTO) {
         return Mono.just(patient)
