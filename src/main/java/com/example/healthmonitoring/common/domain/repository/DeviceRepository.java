@@ -10,4 +10,6 @@ public interface DeviceRepository extends ReactiveCrudRepository<Device, UUID> {
 
     Mono<Device> findByImei(String imei);
 
+    Mono<Device> findByPatient(UUID patientId);
+
 }
