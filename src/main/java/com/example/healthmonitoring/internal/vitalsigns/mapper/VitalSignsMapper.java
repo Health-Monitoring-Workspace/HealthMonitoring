@@ -10,13 +10,10 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static com.example.healthmonitoring.common.domain.entity.utility.VitalSignType.*;
+
 @Slf4j
 public class VitalSignsMapper {
-
-    private static final String PULSE = "PULSE";
-    private static final String BLOOD_PRESSURE = "BLOOD_PRESSURE";
-    private static final String OXYGEN_IN_BLOOD = "OXYGEN_IN_BLOOD";
-    private static final String BODY_TEMPERATURE = "BODY_TEMPERATURE";
 
     public static Flux<Event> mapVitalSignsDtoToEvents(VitalSignsDTO vitalSignsDTO, UUID deviceId) {
         log.info("Mapping vitalSignsDTO {} for deviceId {}", vitalSignsDTO, deviceId);

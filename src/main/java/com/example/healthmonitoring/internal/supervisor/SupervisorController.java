@@ -67,4 +67,9 @@ public class SupervisorController {
         return "addPatientPage/addPatient";
     }
 
+    @GetMapping("/patients/data")
+    public String getPatientsData(Model model) {
+        return "patientsData";
+    }
+
 }
