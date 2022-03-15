@@ -22,6 +22,8 @@ public class VitalSignsController {
     @PostMapping("/vital-signs")
     public Mono<Void> ingestVitalSigns(@RequestBody VitalSignsDTO vitalSignsDTO) {
         log.info("Trying to ingest vitals {}", vitalSignsDTO);
+
         return vitalSignsService.persistVitalSigns(vitalSignsDTO);
     }
+
 }

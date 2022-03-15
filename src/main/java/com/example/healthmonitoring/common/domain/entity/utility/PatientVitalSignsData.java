@@ -17,19 +17,19 @@ public class PatientVitalSignsData {
 
     String name;
 
-    Integer age;
+    String age;
 
     Boolean isOnline;
 
     LocalDateTime lastSeen;
 
-    Integer pulseRate;
+    String pulseRate;
 
-    Integer oxygenLevel;
+    String oxygenLevel;
 
     String bloodPressure;
 
-    Double bodyTemperature;
+    String bodyTemperature;
 
     List<Alert> alerts;
 
