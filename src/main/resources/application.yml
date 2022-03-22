@@ -13,6 +13,8 @@ spring:
       connectTimeout: PT55S
   main:
     allow-bean-definition-overriding: true
+  thymeleaf:
+    cache: false
 
 r2dbc:
   migrate:
