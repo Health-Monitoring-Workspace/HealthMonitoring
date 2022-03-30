@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Controller
@@ -23,53 +24,34 @@ public class SupervisorController {
     SupervisorService supervisorService;
 
     @GetMapping("/")
-    public String login() {
+    public Mono<String> login() {
         log.info("Enter login with {}", AuthenticationUtils.getLoggedInUser().getId());
         if (AuthenticationUtils.getLoggedInUser().getId() != null) {
-            return "/dashboard";
+            return Mono.just("redirect:/dashboard");
         }
-        return "login";
+        return Mono.just("login");
     }
 
     @GetMapping("/login")
-    public String redirectLogin() {
-        return "login";
+    public Mono<String> redirectLogin() {
+        return Mono.just("login");
     }
 
-    @GetMapping("/addPatient")
-    public String addPatientForm(Model model) {
+    @GetMapping("/add-patient")
+    public Mono<String> addPatientForm(Model model) {
         model.addAttribute("patientForm", PatientDTO.builder().build());
 
-        return "addPatientPage/addPatient";
+        return Mono.just("addPatientPage/addPatient");
     }
 
-    @PostMapping("/addPatient")
-    public String addPatientSubmission(@ModelAttribute("patientForm") PatientDTO patientDTO, BindingResult result, Model model) {
+    @PostMapping("/add-patient")
+    public Mono<String> addPatientSubmission(@ModelAttribute("patientForm") PatientDTO patientDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("patientForm", PatientDTO.builder().build());
 
-            return "addPatientPage/addPatient";
+            return Mono.just("addPatientPage/addPatient");
         }
-        supervisorService.addPatient(patientDTO, AuthenticationUtils.getLoggedInUser())
-                .subscribe(
-                        (n) -> {
-                        },
-                        (t) -> {
-                            log.error(
-                                    "Exception while persisting patient for user {}",
-                                    patientDTO,
-                                    t);
-                            model.addAttribute("patientForm", PatientDTO.builder().build());
-                        }
-
-                );
-
-        return "addPatientPage/addPatient";
+        return supervisorService.addPatient(patientDTO, AuthenticationUtils.getLoggedInUser())
+                .thenReturn("addPatientPage/addPatient");
     }
-
-    @GetMapping("/patients/data")
-    public String getPatientsData(Model model) {
-        return "patientsData";
-    }
-
 }

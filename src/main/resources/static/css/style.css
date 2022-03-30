@@ -302,3 +302,7 @@ label input[type="checkbox"] {
     font-weight: bold;
     line-height: 1.5rem;
 }
+
+.card-holder {
+    display: flex;
+}

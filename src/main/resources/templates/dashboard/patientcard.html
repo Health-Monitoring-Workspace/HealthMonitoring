@@ -29,40 +29,40 @@
 </head>
 <body>
 
-<div class="card-holder" th:each="data : ${patients}">
-    <div class="card" >
+<div class="card-holder">
+    <div class="card" th:each="data : ${patients}">
         <div class="name-and-status">
             <h1 th:text="${data.getName()}">Full name</h1>
         </div>
         <div class="more-info">
-            <span>Age: </span>
-            <span>Device: </span>
+            <span th:text="${data.getAge()}">Age: </span>
+<!--            <span th:text="${data.getDevice()}">Device: </span>-->
         </div>
         <div class="vitals-signs">
             <div class="vital-signs-left">
                 <div>
                     <div class="vital-signs-type">PULSE</div>
                     <i class="fa fa-heartbeat"></i>
-                    <div class="value">89</div>
+                    <div class="value" th:text="${data.getPulseRate()} ?: 'not available' ">89</div>
                 </div>
                 <br>
                 <div>
                     <div class="vital-signs-type">BLOOD PRESSURE</div>
                     <i class="fa fa-heart"></i>
-                    <div class="value">120/80</div>
+                    <div class="value" th:text="${data.getBloodPressure()} ?: 'not available'">120/80</div>
                 </div>
             </div>
             <div class="vital-signs-right">
                 <div>
                     <div class="vital-signs-type">BODY TEMPERATURE</div>
                     <i class="fa fa-thermometer-three-quarters"></i>
-                    <div class="value">37.5</div>
+                    <div class="value" th:text="${data.getBodyTemperature()} ?: 'not available'">37.5</div>
                 </div>
                 <br>
                 <div>
                     <div class="vital-signs-type">OXYGEN IN BLOOD</div>
                     <i class="fa fa-tree"></i>
-                    <div class="value">97%</div>
+                    <div class="value" th:text="${data.getOxygenLevel()} ?: 'not available'">97%</div>
                 </div>
             </div>
         </div>
