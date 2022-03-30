@@ -16,6 +16,10 @@ spring:
   thymeleaf:
     cache: false
 
+springbootwebfluxjjwt.password.encoder.secret: mysecret
+springbootwebfluxjjwt.password.encoder.iteration: 33
+springbootwebfluxjjwt.password.encoder.keylength: 256
+
 r2dbc:
   migrate:
     resources-paths:

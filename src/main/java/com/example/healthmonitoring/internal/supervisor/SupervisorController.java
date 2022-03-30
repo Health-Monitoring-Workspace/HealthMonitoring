@@ -29,12 +29,12 @@ public class SupervisorController {
         if (AuthenticationUtils.getLoggedInUser().getId() != null) {
             return Mono.just("redirect:/dashboard");
         }
-        return Mono.just("login");
+        return Mono.just("general/login");
     }
 
     @GetMapping("/login")
-    public Mono<String> redirectLogin() {
-        return Mono.just("login");
+    public Mono<String> redirectLogin(Model model) {
+        return Mono.just("general/login");
     }
 
     @GetMapping("/add-patient")

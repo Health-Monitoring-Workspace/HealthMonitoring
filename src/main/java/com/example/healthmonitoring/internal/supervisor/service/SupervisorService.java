@@ -141,7 +141,7 @@ public class SupervisorService {
 //        Blood pressure is categorized as normal, elevated, or stage 1 or stage 2 high blood pressure:
 //        Normal blood pressure is systolic of less than 120 and diastolic of less than 80 (120/80)
 //        Elevated blood pressure is systolic of 120 to 129 and diastolic less than 80
-//        Stage 1 high blood pressure is systolic is 130 to 139 or diastolic between 80 to 89
+//        Stage 1 high blood pressure is systolic is 130 to 139 or diastolic between 80 and 89
 //        Stage 2 high blood pressure is when systolic is 140 or higher or the diastolic is 90 or higher
 
         if (data.getBloodPressure() == null) {
