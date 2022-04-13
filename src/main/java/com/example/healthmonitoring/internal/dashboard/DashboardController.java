@@ -6,11 +6,15 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
 
 @Slf4j
 @Controller
@@ -28,5 +32,18 @@ public class DashboardController {
                 .map(patients -> model.addAttribute("patients", patients))
                 .then(Mono.just("dashboard/patientcard"));
     }
+
+    @GetMapping("reports")
+    public Mono<String> getReportsForDate(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date, final Model model) {
+        return supervisorService.getReportsForDate(date == null ? LocalDate.of(2022, 3, 10) : date, AuthenticationUtils.getLoggedInUser()).distinct()
+                .collectList()
+                .map(reportDTOS -> {
+                    model.addAttribute("reports", reportDTOS);
+                    model.addAttribute("date", date == null ? LocalDate.now().minusDays(1) : date);
+                    return reportDTOS;
+                })
+                .then(Mono.just("dashboard/reports"));
+    }
+
 
 }

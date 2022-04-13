@@ -24,10 +24,7 @@ import reactor.core.publisher.Mono;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -64,7 +61,13 @@ public class SupervisorService {
 
     public Flux<PatientVitalSignsData> getPatientsData(@NotNull final SupervisorDTO principal) {
         return patientRepository.getDataFromMaterializedView(principal.getId())
-                .flatMap(this::addAlerts);
+                .flatMap(this::addAlerts)
+                .sort(new Comparator<PatientVitalSignsData>() {
+                    @Override
+                    public int compare(PatientVitalSignsData o1, PatientVitalSignsData o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
     }
 
     public Flux<ReportDTO> getReportsForDate(@NotNull LocalDate date, @NotNull SupervisorDTO principal) {
@@ -76,7 +79,13 @@ public class SupervisorService {
                         .map(reportDTOStream::addAll)
                         .thenReturn(Mono.just(Boolean.TRUE))
                 )
-                .flatMap(res -> Flux.fromStream(reportDTOStream.stream()));
+                .flatMap(res -> Flux.fromStream(reportDTOStream.stream()))
+                .sort(new Comparator<ReportDTO>() {
+                    @Override
+                    public int compare(ReportDTO o1, ReportDTO o2) {
+                        return o1.getFullName().compareTo(o2.getFullName());
+                    }
+                });
     }
 
     private Mono<PatientVitalSignsData> addAlerts(PatientVitalSignsData data) {

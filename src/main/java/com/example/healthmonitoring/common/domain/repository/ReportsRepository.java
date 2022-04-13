@@ -17,5 +17,4 @@ public interface ReportsRepository extends ReactiveCrudRepository<Report, UUID> 
     @Scheduled(cron = "59 23 * * *")
     void generateReport();
 
-
 }
