@@ -10,7 +10,9 @@ import com.example.healthmonitoring.common.domain.entity.utility.Gravity;
 import com.example.healthmonitoring.common.domain.entity.utility.PatientVitalSignsData;
 import com.example.healthmonitoring.common.domain.repository.*;
 import com.example.healthmonitoring.internal.supervisor.dto.PatientDTO;
+import com.example.healthmonitoring.internal.supervisor.dto.ReportDTO;
 import com.example.healthmonitoring.internal.supervisor.dto.SupervisorDTO;
+import com.example.healthmonitoring.internal.supervisor.mapper.ReportMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,7 +25,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -39,19 +43,21 @@ public class SupervisorService {
 
     DeviceRepository deviceRepository;
 
+    ReportsRepository reportsRepository;
+
     public Mono<Boolean> addPatient(@NotNull PatientDTO patientDTO, @NotNull SupervisorDTO principal) {
         return
                 patientRepository.save(
-                        Patient.builder()
-                                .name(patientDTO.getPatientFullName())
-                                .CNP(patientDTO.getPatientCNP())
-                                .email(patientDTO.getPatientEmail())
-                                .homeAddress(patientDTO.getPatientHomeAddress())
-                                .phoneNumber(patientDTO.getPatientPhoneNumber())
-                                .birthDate(LocalDate.parse(patientDTO.getPatientBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                                .supervisor(principal.getId())
-                                .build()
-                )
+                                Patient.builder()
+                                        .name(patientDTO.getPatientFullName())
+                                        .CNP(patientDTO.getPatientCNP())
+                                        .email(patientDTO.getPatientEmail())
+                                        .homeAddress(patientDTO.getPatientHomeAddress())
+                                        .phoneNumber(patientDTO.getPatientPhoneNumber())
+                                        .birthDate(LocalDate.parse(patientDTO.getPatientBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                                        .supervisor(principal.getId())
+                                        .build()
+                        )
                         .flatMap(patient -> persistDetails(patient, patientDTO))
                         .then(Mono.just(Boolean.TRUE));
     }
@@ -59,6 +65,18 @@ public class SupervisorService {
     public Flux<PatientVitalSignsData> getPatientsData(@NotNull final SupervisorDTO principal) {
         return patientRepository.getDataFromMaterializedView(principal.getId())
                 .flatMap(this::addAlerts);
+    }
+
+    public Flux<ReportDTO> getReportsForDate(@NotNull LocalDate date, @NotNull SupervisorDTO principal) {
+        Set<ReportDTO> reportDTOStream = new HashSet<>();
+        return patientRepository.findAllBySupervisor(principal.getId())
+                .flatMap(patient -> reportsRepository.findAllByPatientAndDate(patient.getId(), date)
+                        .collectList()
+                        .flatMap(reports -> ReportMapper.mapToDTO(reports, patient))
+                        .map(reportDTOStream::addAll)
+                        .thenReturn(Mono.just(Boolean.TRUE))
+                )
+                .flatMap(res -> Flux.fromStream(reportDTOStream.stream()));
     }
 
     private Mono<PatientVitalSignsData> addAlerts(PatientVitalSignsData data) {
