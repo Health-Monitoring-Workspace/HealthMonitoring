@@ -24,35 +24,24 @@
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css"/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
-    <script>
-        $("#generate").on('click', function () {
-            console.log("click");
-            var date = $("#date").getDate();
-            if (name) {
-                window.location = "/dashboard/reports?date=" + date;
-            } else {
-                window.location = "/dashboard/reports";
-            }
-        });
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 
 </head>
 <body>
 
+<h1 class="reports_title">Reports for [[${report_date}]]</h1>
+
 <div class="date-selector">
-    <label for="date">Date:</label>
     <input type="date" id="date" name="date">
-    <input type="button" class="btn" id="generate">Generate</input>
+    <button type="button" class="btn" id="generate">GO</button>
 </div>
 
-<div class="card-holder">
+<div class = "no-reports" th:if="${reports.empty}">There are no reports for this date. Please select another one.</div>
+<div class="card-holder" th:unless="${reports.empty}">
     <div class="card" th:each="data : ${reports}">
         <div class="name-and-status">
-            <h1 th:text="${data.getFullName()}">Full name</h1>
-        </div>
-        <div class="more-info">
-            <span>Age: </span>
-            <span th:text="${data.getAge()}">Age: </span>
+            <h2 th:text="|${data.getFullName()}, ${data.getAge()}|">Full name</h2>
         </div>
         <div class="vitals-signs">
             <div class="vital-signs-left">
@@ -85,6 +74,17 @@
     </div>
 
 </div>
+<script>
+    $("#generate").on('click', function () {
+        console.log("click");
+        var date = $("#date").val();
+        if (date) {
+            window.location = "/dashboard/reports?date=" + date;
+        } else {
+            window.location = "/dashboard/reports";
+        }
+    });
+</script>
 
 </body>
 </html>

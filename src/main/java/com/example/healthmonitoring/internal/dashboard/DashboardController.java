@@ -35,11 +35,11 @@ public class DashboardController {
 
     @GetMapping("reports")
     public Mono<String> getReportsForDate(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date, final Model model) {
-        return supervisorService.getReportsForDate(date == null ? LocalDate.of(2022, 3, 10) : date, AuthenticationUtils.getLoggedInUser()).distinct()
+        return supervisorService.getReportsForDate(date == null ? LocalDate.now().minusDays(1) : date, AuthenticationUtils.getLoggedInUser()).distinct()
                 .collectList()
                 .map(reportDTOS -> {
                     model.addAttribute("reports", reportDTOS);
-                    model.addAttribute("date", date == null ? LocalDate.now().minusDays(1) : date);
+                    model.addAttribute("report_date", date == null ? LocalDate.now().minusDays(1) : date);
                     return reportDTOS;
                 })
                 .then(Mono.just("dashboard/reports"));
