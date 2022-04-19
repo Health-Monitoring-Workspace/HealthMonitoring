@@ -10,7 +10,9 @@ import com.example.healthmonitoring.common.domain.entity.utility.Gravity;
 import com.example.healthmonitoring.common.domain.entity.utility.PatientVitalSignsData;
 import com.example.healthmonitoring.common.domain.repository.*;
 import com.example.healthmonitoring.internal.supervisor.dto.PatientDTO;
+import com.example.healthmonitoring.internal.supervisor.dto.ReportDTO;
 import com.example.healthmonitoring.internal.supervisor.dto.SupervisorDTO;
+import com.example.healthmonitoring.internal.supervisor.mapper.ReportMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,8 +24,7 @@ import reactor.core.publisher.Mono;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -39,26 +40,52 @@ public class SupervisorService {
 
     DeviceRepository deviceRepository;
 
+    ReportsRepository reportsRepository;
+
     public Mono<Boolean> addPatient(@NotNull PatientDTO patientDTO, @NotNull SupervisorDTO principal) {
         return
                 patientRepository.save(
-                        Patient.builder()
-                                .name(patientDTO.getPatientFullName())
-                                .CNP(patientDTO.getPatientCNP())
-                                .email(patientDTO.getPatientEmail())
-                                .homeAddress(patientDTO.getPatientHomeAddress())
-                                .phoneNumber(patientDTO.getPatientPhoneNumber())
-                                .birthDate(LocalDate.parse(patientDTO.getPatientBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                                .supervisor(principal.getId())
-                                .build()
-                )
+                                Patient.builder()
+                                        .name(patientDTO.getPatientFullName())
+                                        .CNP(patientDTO.getPatientCNP())
+                                        .email(patientDTO.getPatientEmail())
+                                        .homeAddress(patientDTO.getPatientHomeAddress())
+                                        .phoneNumber(patientDTO.getPatientPhoneNumber())
+                                        .birthDate(LocalDate.parse(patientDTO.getPatientBirthDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                                        .supervisor(principal.getId())
+                                        .build()
+                        )
                         .flatMap(patient -> persistDetails(patient, patientDTO))
                         .then(Mono.just(Boolean.TRUE));
     }
 
     public Flux<PatientVitalSignsData> getPatientsData(@NotNull final SupervisorDTO principal) {
         return patientRepository.getDataFromMaterializedView(principal.getId())
-                .flatMap(this::addAlerts);
+                .flatMap(this::addAlerts)
+                .sort(new Comparator<PatientVitalSignsData>() {
+                    @Override
+                    public int compare(PatientVitalSignsData o1, PatientVitalSignsData o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
+    }
+
+    public Flux<ReportDTO> getReportsForDate(@NotNull LocalDate date, @NotNull SupervisorDTO principal) {
+        Set<ReportDTO> reportDTOStream = new HashSet<>();
+        return patientRepository.findAllBySupervisor(principal.getId())
+                .flatMap(patient -> reportsRepository.findAllByPatientAndDate(patient.getId(), date)
+                        .collectList()
+                        .flatMap(reports -> ReportMapper.mapToDTO(reports, patient))
+                        .map(reportDTOStream::addAll)
+                        .thenReturn(Mono.just(Boolean.TRUE))
+                )
+                .flatMap(res -> Flux.fromStream(reportDTOStream.stream()))
+                .sort(new Comparator<ReportDTO>() {
+                    @Override
+                    public int compare(ReportDTO o1, ReportDTO o2) {
+                        return o1.getFullName().compareTo(o2.getFullName());
+                    }
+                });
     }
 
     private Mono<PatientVitalSignsData> addAlerts(PatientVitalSignsData data) {
@@ -141,7 +168,7 @@ public class SupervisorService {
 //        Blood pressure is categorized as normal, elevated, or stage 1 or stage 2 high blood pressure:
 //        Normal blood pressure is systolic of less than 120 and diastolic of less than 80 (120/80)
 //        Elevated blood pressure is systolic of 120 to 129 and diastolic less than 80
-//        Stage 1 high blood pressure is systolic is 130 to 139 or diastolic between 80 to 89
+//        Stage 1 high blood pressure is systolic is 130 to 139 or diastolic between 80 and 89
 //        Stage 2 high blood pressure is when systolic is 140 or higher or the diastolic is 90 or higher
 
         if (data.getBloodPressure() == null) {
