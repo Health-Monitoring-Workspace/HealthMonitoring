@@ -16,5 +16,4 @@ public interface ReportsRepository extends ReactiveCrudRepository<Report, UUID> 
     @Query("select * from generate_report(now()::date)")
     @Scheduled(cron = "59 23 * * *")
     void generateReport();
-
 }

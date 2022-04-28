@@ -29,7 +29,7 @@
 
         // Refresh or reload page.
         function refresh() {
-            window .location.reload();
+            window.location.reload();
             console.log("refresh");
         }
     </script>
@@ -39,12 +39,18 @@
 
 <div class="card-holder">
     <div class="card" th:each="data : ${patients}">
-        <div class="name-and-status">
-            <h1 th:text="${data.getName()}">Full name</h1>
-        </div>
-        <div class="more-info">
-            <span>Age: </span>
-            <span th:text="${data.getAge()}">Age: </span>
+        <a th:href="@{/dashboard/patients/{id}(id=${data.getPatientId()})}"> <i class="fa fa-info-circle"
+                                                                                aria-hidden="true"></i></a>
+        <div class="name-and-status-dashboard-card">
+            <div class="name-and-status-left">
+                <h2 th:text="${data.getName()}" id="name">Full name</h2>
+                <h3 th:text="|Age ${data.getAge()}|" id="age"></h3>
+            </div>
+            <div class="name-and-status-right">
+                <span th:if="${data.getIsOnline()}" id="isOnline"><i class="fa fa-circle" style="color:green"
+                                                                     aria-hidden="true"></i></span>
+                <span th:unless="${data.getIsOnline()}" id="lastSeen">Last seen at [[${#temporals.format(data.getLastSeen(), 'dd-MM-yyyy HH:mm')}]]</span>
+            </div>
         </div>
         <div class="vitals-signs">
             <div class="vital-signs-left">

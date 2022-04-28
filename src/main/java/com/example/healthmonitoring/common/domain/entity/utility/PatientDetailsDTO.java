@@ -1,17 +1,27 @@
-package com.example.healthmonitoring.internal.supervisor.dto;
+package com.example.healthmonitoring.common.domain.entity.utility;
 
+import com.example.healthmonitoring.common.domain.entity.Event;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Builder(toBuilder = true)
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class PatientDTO {
+@ToString
+public class PatientDetailsDTO {
+
+    @NotNull
+    UUID patientId;
 
     @NotNull
     @NotBlank
@@ -33,12 +43,14 @@ public class PatientDTO {
     @NotBlank
     String patientHomeAddress;
 
+    LocalDate patientBirthDate;
+
     @NotNull
-    String patientBirthDate;
+    Integer patientAge;
 
     @NotNull
     @NotBlank
-    String deviceIMEI;
+    String deviceImei;
 
     String deviceBrand;
 
@@ -59,4 +71,20 @@ public class PatientDTO {
     String emergencyContactPhoneNumber;
 
     String emergencyContactRelationship;
+
+    Boolean isOnline;
+
+    LocalDateTime lastSeen;
+
+    String pulseRate;
+
+    String oxygenLevel;
+
+    String bloodPressure;
+
+    String bodyTemperature;
+
+    List<Alert> alerts;
+
+    List<Event> recentData;
 }

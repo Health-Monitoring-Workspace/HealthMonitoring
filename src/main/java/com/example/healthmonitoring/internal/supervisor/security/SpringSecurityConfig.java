@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
-import org.springframework.security.authorization.AuthorityReactiveAuthorizationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
@@ -14,7 +13,6 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationEntryPoint;
 import org.springframework.security.web.server.authentication.logout.RedirectServerLogoutSuccessHandler;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
@@ -42,18 +40,9 @@ public class SpringSecurityConfig {
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .and()
                 .authorizeExchange()
-                .pathMatchers("/login.html", "/vital-signs")
-                .access(
-                        (auth, obj) ->
-                                AuthorityReactiveAuthorizationManager.hasRole("USER").check(auth, obj)
-                                        .flatMap(
-                                                (decision) -> {
-                                                    if (decision.isGranted()) {
-                                                        return Mono.just(decision);
-                                                    }
-                                                    return AuthorityReactiveAuthorizationManager.hasRole("ADMIN").check(auth, obj);
-                                                }))
-                .anyExchange().permitAll() // Except for protected paths above, the rest will be open
+                .pathMatchers("/*").permitAll()
+                .anyExchange()
+                .permitAll()// Except for protected paths above, the rest will be open
                 .and()
                 .authenticationManager(authenticationManager())
                 .exceptionHandling(

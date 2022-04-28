@@ -258,7 +258,6 @@ label input[type="checkbox"] {
     width: 350px;
     height: 250px;
     background-color: #fff;
-    background: linear-gradient(#f8f8f8, #fff);
     box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.4);
     border-radius: 6px;
     /*overflow: hidden;*/
@@ -270,6 +269,28 @@ label input[type="checkbox"] {
     text-align: center;
 }
 
+.card .name-and-status-dashboard-card {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: stretch;
+    justify-content: space-around;
+    align-items: baseline;
+}
+
+.card .name-and-status-dashboard-card #name {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.card .name-and-status-dashboard-card #lastSeen {
+    text-align: center;
+    font-size: 12px;
+}
+
+.card .name-and-status-left #age {
+    margin: 0 auto;
+}
 .card .vitals-signs {
     font-size: 1rem;
     display: flex;
@@ -342,4 +363,16 @@ label input[type="checkbox"] {
     text-align: center;
     width: 50%;
     margin: 0 auto;
+}
+
+.card .name-and-status-dashboard-card .name-and-status-left {
+    font-family: FontAwesome;
+    text-align: center;
+    display: inline;
+}
+
+.card .name-and-status-dashboard-card .name-and-status-right {
+    font-family: FontAwesome;
+    text-align: center;
+    display: inline;
 }
