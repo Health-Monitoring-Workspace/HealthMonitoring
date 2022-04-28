@@ -24,7 +24,7 @@ select p.id                                 as patient_id,
        bodytemp.data                        as body_temperature,
        lastseen.created_at                  as last_seen,
        case
-           when (lastseen.created_at > now() - interval '2 minutes') then TRUE
+           when (lastseen.created_at::timestamp > now() + interval '3 hours '- interval '2 minutes') then TRUE
            else FALSE
            END                              as is_online,
        s.id                                 as supervisor
