@@ -9,14 +9,17 @@ import com.example.healthmonitoring.internal.vitalsigns.service.VitalSignsServic
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.annotation.After;
+import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.time.LocalDate;
 
 @RestController
@@ -28,7 +31,7 @@ public class VitalSignsController {
     VitalSignsService vitalSignsService;
     SupervisorService supervisorService;
 
-    @PostMapping("/vital-signs")
+    @PostMapping(value = "/vital-signs", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Mono<Void> ingestVitalSigns(@RequestBody VitalSignsDTO vitalSignsDTO) {
         log.info("Trying to ingest vitals {}", vitalSignsDTO);
         return vitalSignsService.persistVitalSigns(vitalSignsDTO);
@@ -44,6 +47,12 @@ public class VitalSignsController {
     public Flux<ReportDTO> reportDTOFlux() {
         log.info("Returining patients data for supervisor {}", AuthenticationUtils.getLoggedInUser().getId());
         return supervisorService.getReportsForDate(LocalDate.of(2022, 3, 10), AuthenticationUtils.getLoggedInUser()).distinct();
+    }
+
+    @PostMapping(value = "/vs", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<Void> voidMono(@RequestBody Integer string) {
+        System.out.println(string);
+        return Mono.just(string).then();
     }
 
 }

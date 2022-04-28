@@ -8,12 +8,15 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Builder(toBuilder = true)
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PatientVitalSignsData {
+
+    UUID patientId;
 
     String name;
 

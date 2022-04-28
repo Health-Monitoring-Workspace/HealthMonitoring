@@ -5,6 +5,7 @@ import com.example.healthmonitoring.internal.vitalsigns.dto.VitalSignsDTO;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 
+import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
@@ -15,15 +16,17 @@ import static com.example.healthmonitoring.common.domain.entity.utility.VitalSig
 @Slf4j
 public class VitalSignsMapper {
 
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+
     public static Flux<Event> mapVitalSignsDtoToEvents(VitalSignsDTO vitalSignsDTO, UUID deviceId) {
         log.info("Mapping vitalSignsDTO {} for deviceId {}", vitalSignsDTO, deviceId);
         return Flux.fromStream(
                 Stream.of(
-                        pulseEvent(vitalSignsDTO, deviceId),
-                        bloodPressureEvent(vitalSignsDTO, deviceId),
-                        oxygenInBloodEvent(vitalSignsDTO, deviceId),
-                        bodyTemperatureEvent(vitalSignsDTO, deviceId)
-                )
+                                pulseEvent(vitalSignsDTO, deviceId),
+                                bloodPressureEvent(vitalSignsDTO, deviceId),
+                                oxygenInBloodEvent(vitalSignsDTO, deviceId),
+                                bodyTemperatureEvent(vitalSignsDTO, deviceId)
+                        )
                         .filter(Objects::nonNull)
                         .flatMap(Function.identity())
         );
@@ -64,7 +67,7 @@ public class VitalSignsMapper {
                 ? Stream.of(Event.builder()
                 .deviceId(deviceId)
                 .vitalSignType(BODY_TEMPERATURE)
-                .data(vitalSignsDTO.getBodyTemperature().toString())
+                .data(df.format(vitalSignsDTO.getBodyTemperature()))
                 .build())
                 : Stream.empty();
     }

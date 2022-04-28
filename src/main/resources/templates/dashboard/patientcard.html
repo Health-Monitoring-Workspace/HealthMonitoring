@@ -29,7 +29,7 @@
 
         // Refresh or reload page.
         function refresh() {
-            window .location.reload();
+            window.location.reload();
             console.log("refresh");
         }
     </script>
@@ -39,12 +39,15 @@
 
 <div class="card-holder">
     <div class="card" th:each="data : ${patients}">
+        <a th:href="@{/dashboard/patients/{id}(id=${data.getPatientId()})}"> <i class="fa fa-info-circle"
+                                                                                aria-hidden="true"></i></a>
         <div class="name-and-status">
             <h1 th:text="${data.getName()}">Full name</h1>
         </div>
         <div class="more-info">
             <span>Age: </span>
             <span th:text="${data.getAge()}">Age: </span>
+
         </div>
         <div class="vitals-signs">
             <div class="vital-signs-left">

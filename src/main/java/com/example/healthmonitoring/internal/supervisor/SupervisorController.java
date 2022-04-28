@@ -41,17 +41,17 @@ public class SupervisorController {
     public Mono<String> addPatientForm(Model model) {
         model.addAttribute("patientForm", PatientDTO.builder().build());
 
-        return Mono.just("addPatientPage/addPatient");
+        return Mono.just("addPatientPage/add-patient");
     }
 
     @PostMapping("/add-patient")
-    public Mono<String> addPatientSubmission(@ModelAttribute("patientForm") PatientDTO patientDTO, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("patientForm", PatientDTO.builder().build());
-
-            return Mono.just("addPatientPage/addPatient");
-        }
+    public Mono<String> addPatientSubmission(@ModelAttribute("patientForm") PatientDTO patientDTO, Model model) {
+//        if (result.hasErrors()) {
+//            model.addAttribute("patientForm", PatientDTO.builder().build());
+//
+//            return Mono.just("addPatientPage/add-patient");
+//        }
         return supervisorService.addPatient(patientDTO, AuthenticationUtils.getLoggedInUser())
-                .thenReturn("addPatientPage/addPatient");
+                .thenReturn("addPatientPage/add-patient");
     }
 }
