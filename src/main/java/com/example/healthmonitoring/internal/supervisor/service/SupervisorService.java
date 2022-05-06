@@ -1,9 +1,6 @@
 package com.example.healthmonitoring.internal.supervisor.service;
 
-import com.example.healthmonitoring.common.domain.entity.Device;
-import com.example.healthmonitoring.common.domain.entity.EmergencyContact;
-import com.example.healthmonitoring.common.domain.entity.MedicalRecord;
-import com.example.healthmonitoring.common.domain.entity.Patient;
+import com.example.healthmonitoring.common.domain.entity.*;
 import com.example.healthmonitoring.common.domain.entity.utility.*;
 import com.example.healthmonitoring.common.domain.repository.*;
 import com.example.healthmonitoring.internal.supervisor.dto.PatientDTO;
@@ -96,11 +93,14 @@ public class SupervisorService {
 
     private Mono<PatientDetailsDTO> addRecentData(PatientDetailsDTO data) {
         return eventRepository.getRecentEventsForPatient(data.getPatientId())
+                .sort(new Comparator<Event>() {
+                    @Override
+                    public int compare(Event o1, Event o2) {
+                        return o1.getCreatedAt().compareTo(o2.getCreatedAt());
+                    }
+                })
                 .collectList()
-                .map(events -> {
-                    data.toBuilder().recentData(events).build();
-                    return data;
-                });
+                .map(events -> data.toBuilder().recentData(events).build());
     }
 
     private Mono<PatientDetailsDTO> addAlerts(PatientDetailsDTO data) {
