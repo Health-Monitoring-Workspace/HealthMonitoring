@@ -96,7 +96,7 @@ public class SupervisorService {
                 .sort(new Comparator<Event>() {
                     @Override
                     public int compare(Event o1, Event o2) {
-                        return o1.getCreatedAt().compareTo(o2.getCreatedAt());
+                        return o2.getCreatedAt().compareTo(o1.getCreatedAt());
                     }
                 })
                 .collectList()

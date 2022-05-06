@@ -144,29 +144,84 @@
         </div>
         <br>
         <div class="vital-signs-details">
-            <div class="vs-type">
-                <i class="fa fa-heartbeat"></i>
-                <div>PULSE</div>
-                <div th:text="${details.getPulseRate()} ?: 'not available' ">89</div>
+            <div class="vs-type"
+                 th:with="alert = ${details.getAlerts().^[alertType == T(com.example.healthmonitoring.common.domain.entity.utility.AlertType).PULSE]}">
+                <div class="vital-signs-type">PULSE</div>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).HIGH}"
+                   class="fa fa-heartbeat" style="color:red"></i>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).MEDIUM}"
+                   class="fa fa-heartbeat" style="color:orange"></i>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).LOW}"
+                   class="fa fa-heartbeat" style="color:yellow"></i>
+                <i th:unless="${alert != null}" class="fa fa-heartbeat" style="color: green"></i>
+                <div class="value" th:text="${details.getPulseRate()} ?: 'not available' ">89</div>
             </div>
-            <div class="vs-type">
-                <i class="fa fa-heart"></i>
-                <div>BLOOD PRESSURE</div>
-                <div th:text="${details.getBloodPressure()} ?: 'not available'">120/80</div>
+            <div class="vs-type"
+                 th:with="alert = ${details.getAlerts().^[alertType == T(com.example.healthmonitoring.common.domain.entity.utility.AlertType).BLOOD_PRESSURE]}">
+                <div class="vital-signs-type">BLOOD PRESSURE</div>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).HIGH}"
+                   class="fa fa-heart" style="color:red"></i>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).MEDIUM}"
+                   class="fa fa-heart" style="color:orange"></i>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).LOW}"
+                   class="fa fa-heart" style="color:yellow"></i>
+                <i th:unless="${alert != null}" class="fa fa-heart" style="color:green"></i>
+                <div class="value" th:text="${details.getBloodPressure()} ?: 'not available'">120/80</div>
             </div>
-            <div class="vs-type">
-                <i class="fa fa-thermometer-three-quarters"></i>
-                <div>BODY TEMPERATURE</div>
-                <div th:text="${details.getBodyTemperature()} ?: 'not available'">37.5</div>
+            <div class="vs-type"
+                 th:with="alert = ${details.getAlerts().^[alertType == T(com.example.healthmonitoring.common.domain.entity.utility.AlertType).BODY_TEMPERATURE]}">
+                <div class="vital-signs-type">BODY TEMPERATURE</div>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).HIGH}"
+                   class="fa fa-thermometer-three-quarters" style="color:red"></i>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).MEDIUM}"
+                   class="fa fa-thermometer-three-quarters" style="color:orange"></i>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).LOW}"
+                   class="fa fa-thermometer-three-quarters" style="color:yellow"></i>
+                <i th:unless="${alert != null}" class="fa fa-thermometer-three-quarters" style="color:green"></i>
+                <div class="value" th:text="${details.getBodyTemperature()} ?: 'not available'">37.5</div>
             </div>
-            <div class="vs-type">
-                <i class="fa fa-tree"></i>
-                <div>OXYGEN IN BLOOD</div>
-                <div th:text="${details.getOxygenLevel()} ?: 'not available'">97%</div>
+            <div class="vs-type"
+                 th:with="alert = ${details.getAlerts().^[alertType == T(com.example.healthmonitoring.common.domain.entity.utility.AlertType).OXYGEN_IN_BLOOD]}">
+                <div class="vital-signs-type">OXYGEN IN BLOOD</div>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).HIGH}"
+                   class="fa fa-tree" style="color:red"></i>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).MEDIUM}"
+                   class="fa fa-tree" style="color:orange"></i>
+                <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).LOW}"
+                   class="fa fa-tree" style="color:yellow"></i>
+                <i th:unless="${alert != null}" class="fa fa-tree" style="color:green"></i>
+                <div class="value" th:text="${details.getOxygenLevel()} ?: 'not available'">97%</div>
             </div>
         </div>
         <hr>
-        <div class = "table-div">
+        <div class="alerts" th:unless="${details.getAlerts().empty}">
+            Alerts:
+            <br>
+            <br>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Alert type</th>
+                    <th>Message</th>
+                    <th>Gravity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${details.getAlerts().empty}">
+                    <td colspan="3"> No alerts.</td>
+                </tr>
+                <tr th:each="data:${details.getAlerts()}">
+                    <td th:text="${data.getAlertType()}"></td>
+                    <td th:text="${data.getMessage()}"></td>
+                    <td th:text="${data.getGravity()}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <br>
+            <hr>
+        </div>
+
+        <div class="table-div">
             Patient vital signs in the last 20 minutes:
             <br>
             <br>

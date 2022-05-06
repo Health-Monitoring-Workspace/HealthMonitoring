@@ -54,28 +54,52 @@
         </div>
         <div class="vitals-signs">
             <div class="vital-signs-left">
-                <div>
+                <div th:with="alert = ${data.getAlerts().^[alertType == T(com.example.healthmonitoring.common.domain.entity.utility.AlertType).PULSE]}">
                     <div class="vital-signs-type">PULSE</div>
-                    <i class="fa fa-heartbeat"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).HIGH}"
+                       class="fa fa-heartbeat" style="color:red"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).MEDIUM}"
+                       class="fa fa-heartbeat" style="color:orange"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).LOW}"
+                       class="fa fa-heartbeat" style="color:yellow"></i>
+                    <i th:unless="${alert != null}" class="fa fa-heartbeat" style="color: green"></i>
                     <div class="value" th:text="${data.getPulseRate()} ?: 'not available' ">89</div>
                 </div>
                 <br>
-                <div>
+                <div th:with="alert = ${data.getAlerts().^[alertType == T(com.example.healthmonitoring.common.domain.entity.utility.AlertType).BLOOD_PRESSURE]}">
                     <div class="vital-signs-type">BLOOD PRESSURE</div>
-                    <i class="fa fa-heart"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).HIGH}"
+                       class="fa fa-heart" style="color:red"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).MEDIUM}"
+                       class="fa fa-heart" style="color:orange"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).LOW}"
+                       class="fa fa-heart" style="color:yellow"></i>
+                    <i th:unless="${alert != null}" class="fa fa-heart" style="color:green"></i>
                     <div class="value" th:text="${data.getBloodPressure()} ?: 'not available'">120/80</div>
                 </div>
             </div>
             <div class="vital-signs-right">
-                <div>
+                <div th:with="alert = ${data.getAlerts().^[alertType == T(com.example.healthmonitoring.common.domain.entity.utility.AlertType).BODY_TEMPERATURE]}">
                     <div class="vital-signs-type">BODY TEMPERATURE</div>
-                    <i class="fa fa-thermometer-three-quarters"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).HIGH}"
+                       class="fa fa-thermometer-three-quarters" style="color:red"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).MEDIUM}"
+                       class="fa fa-thermometer-three-quarters" style="color:orange"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).LOW}"
+                       class="fa fa-thermometer-three-quarters" style="color:yellow"></i>
+                    <i th:unless="${alert != null}" class="fa fa-thermometer-three-quarters" style="color:green"></i>
                     <div class="value" th:text="${data.getBodyTemperature()} ?: 'not available'">37.5</div>
                 </div>
                 <br>
-                <div>
+                <div th:with="alert = ${data.getAlerts().^[alertType == T(com.example.healthmonitoring.common.domain.entity.utility.AlertType).OXYGEN_IN_BLOOD]}">
                     <div class="vital-signs-type">OXYGEN IN BLOOD</div>
-                    <i class="fa fa-tree"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).HIGH}"
+                       class="fa fa-tree" style="color:red"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).MEDIUM}"
+                       class="fa fa-tree" style="color:orange"></i>
+                    <i th:if="${alert != null and alert.gravity == T(com.example.healthmonitoring.common.domain.entity.utility.Gravity).LOW}"
+                       class="fa fa-tree" style="color:yellow"></i>
+                    <i th:unless="${alert != null}" class="fa fa-tree" style="color:green"></i>
                     <div class="value" th:text="${data.getOxygenLevel()} ?: 'not available'">97%</div>
                 </div>
             </div>
