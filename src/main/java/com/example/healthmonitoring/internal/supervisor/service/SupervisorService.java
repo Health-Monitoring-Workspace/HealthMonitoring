@@ -1,6 +1,9 @@
 package com.example.healthmonitoring.internal.supervisor.service;
 
-import com.example.healthmonitoring.common.domain.entity.*;
+import com.example.healthmonitoring.common.domain.entity.Device;
+import com.example.healthmonitoring.common.domain.entity.EmergencyContact;
+import com.example.healthmonitoring.common.domain.entity.MedicalRecord;
+import com.example.healthmonitoring.common.domain.entity.Patient;
 import com.example.healthmonitoring.common.domain.entity.utility.*;
 import com.example.healthmonitoring.common.domain.repository.*;
 import com.example.healthmonitoring.internal.supervisor.dto.EditPatientDTO;
@@ -61,7 +64,7 @@ public class SupervisorService {
         return patientRepository
                 .getDataFromMaterializedView(principal.getId())
                 .flatMap(this::addAlerts)
-                .sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+                .sort(Comparator.comparing(PatientVitalSignsData::getName));
     }
 
     public Flux<ReportDTO> getReportsForDate(@NotNull LocalDate date, @NotNull SupervisorDTO principal) {
@@ -74,7 +77,7 @@ public class SupervisorService {
                         .thenReturn(Mono.just(Boolean.TRUE))
                 )
                 .flatMap(res -> Flux.fromStream(reportDTOStream.stream()))
-                .sort((o1, o2) -> o1.getFullName().compareTo(o2.getFullName()));
+                .sort(Comparator.comparing(ReportDTO::getFullName));
     }
 
     public Mono<PatientDetailsDTO> getPatientDetails(@NotNull UUID patientId) {
@@ -112,6 +115,17 @@ public class SupervisorService {
                         .relationship(patientDetails.getEmergencyContactRelationship())
                         .build())
                 .flatMap(emergencyContactRepository::save)
+                .then();
+    }
+
+    public Mono<Void> deletePatient(@NotNull UUID patientId) {
+        return emergencyContactRepository.deleteByPatient(patientId)
+                .then(medicalRecordRepository.deleteByPatient(patientId))
+                .then(reportsRepository.deleteAllByPatient(patientId))
+                .then(deviceRepository.findByPatient(patientId))
+                .flatMap(device -> eventRepository.deleteAllByDeviceId(device.getId()))
+                .then(deviceRepository.deleteByPatient(patientId))
+                .then(patientRepository.deleteById(patientId))
                 .then();
     }
 

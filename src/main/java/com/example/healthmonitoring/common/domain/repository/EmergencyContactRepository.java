@@ -9,4 +9,7 @@ import java.util.UUID;
 public interface EmergencyContactRepository extends ReactiveCrudRepository<EmergencyContact, UUID> {
 
     Mono<EmergencyContact> findByPatient(UUID patient);
+
+    Mono<Void> deleteByPatient(UUID patient);
+
 }

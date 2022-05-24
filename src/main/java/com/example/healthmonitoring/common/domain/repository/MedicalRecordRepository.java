@@ -10,4 +10,6 @@ public interface MedicalRecordRepository extends ReactiveCrudRepository<MedicalR
 
     Mono<MedicalRecord> findByPatient(UUID patient);
 
+    Mono<Void> deleteByPatient(UUID patient);
+
 }

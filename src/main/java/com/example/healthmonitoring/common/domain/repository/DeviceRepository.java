@@ -12,4 +12,6 @@ public interface DeviceRepository extends ReactiveCrudRepository<Device, UUID> {
 
     Mono<Device> findByPatient(UUID patientId);
 
+    Mono<Void> deleteByPatient(UUID patient);
+
 }

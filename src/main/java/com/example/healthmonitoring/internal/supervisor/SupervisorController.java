@@ -1,6 +1,5 @@
 package com.example.healthmonitoring.internal.supervisor;
 
-import com.example.healthmonitoring.common.domain.entity.utility.PatientDetailsDTO;
 import com.example.healthmonitoring.internal.supervisor.dto.EditPatientDTO;
 import com.example.healthmonitoring.internal.supervisor.dto.PatientDTO;
 import com.example.healthmonitoring.internal.supervisor.security.utils.AuthenticationUtils;
@@ -9,19 +8,15 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import reactor.core.publisher.Mono;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Controller
@@ -67,5 +62,11 @@ public class SupervisorController {
     public Mono<String> editPatientSubmission(@ModelAttribute("details") EditPatientDTO patientDTO, Model model) {
         return supervisorService.editPatientDetails(patientDTO)
                 .thenReturn("redirect:/dashboard/patients/" + patientDTO.getPatientId());
+    }
+
+    @PostMapping("/delete-patient/{id}")
+    public Mono<String> deletePatientSubmission(@PathVariable final UUID id, final Model model) {
+        return supervisorService.deletePatient(id)
+                .thenReturn("redirect:/dashboard");
     }
 }
