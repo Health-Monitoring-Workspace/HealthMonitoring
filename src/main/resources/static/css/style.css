@@ -473,6 +473,18 @@ label input[type="checkbox"] {
     background-image: linear-gradient(135deg, #6C8CBF 10%, #5AA7A7 100%);
 }
 
+#deleteButton {
+    float: left;
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 35px;
+    border-radius: 50px;
+    display: flex;
+    border: 0;
+    outline: 0;
+    background-image: linear-gradient(135deg, #d7816a 10%, #bd4f6c 100%);
+}
+
 .vital-signs-details {
     font-size: 1.2vmax;
     display: flex;
