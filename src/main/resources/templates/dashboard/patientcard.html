@@ -36,7 +36,7 @@
 
 </head>
 <body>
-
+<div th:include="fragments/header :: header" class="topnav"></div>
 <div class="card-holder">
     <div class="card" th:each="data : ${patients}">
         <a th:href="@{/dashboard/patients/{id}(id=${data.getPatientId()})}"> <i class="fa fa-info-circle"
