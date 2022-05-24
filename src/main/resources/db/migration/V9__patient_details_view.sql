@@ -1,4 +1,4 @@
-drop materialized view  patients_details_view;
+drop materialized view patients_details_view;
 
 CREATE MATERIALIZED VIEW patients_details_view as
 select p.id                                 as patient_id,
@@ -9,6 +9,7 @@ select p.id                                 as patient_id,
        p.home_address                       as patient_home_address,
        p.birth_date                         as patient_birth_date,
        date_part('year', age(p.birth_date)) as patient_age,
+       dev.id                               as device_id,
        dev.imei                             as device_imei,
        dev.brand                            as device_brand,
        dev.model                            as device_model,
@@ -24,7 +25,7 @@ select p.id                                 as patient_id,
        bodytemp.data                        as body_temperature,
        lastseen.created_at                  as last_seen,
        case
-           when (lastseen.created_at::timestamp > now() + interval '3 hours '- interval '2 minutes') then TRUE
+           when (lastseen.created_at::timestamp > now() + interval '3 hours ' - interval '2 minutes') then TRUE
            else FALSE
            END                              as is_online,
        s.id                                 as supervisor

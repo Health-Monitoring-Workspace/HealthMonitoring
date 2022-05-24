@@ -15,3 +15,28 @@ create trigger after_insert
     on events
     for each statement
 execute procedure refresh_view();
+
+create trigger after_insert
+    after insert or update or delete
+    on patients
+    for each statement
+execute procedure refresh_view();
+
+create trigger after_insert
+    after insert or update or delete
+    on devices
+    for each statement
+execute procedure refresh_view();
+
+create trigger after_insert
+    after insert or update or delete
+    on emergency_contacts
+    for each statement
+execute procedure refresh_view();
+
+create trigger after_insert
+    after insert or update or delete
+    on medical_records
+    for each statement
+execute procedure refresh_view();
+

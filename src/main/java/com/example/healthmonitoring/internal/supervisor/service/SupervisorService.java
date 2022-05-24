@@ -3,6 +3,7 @@ package com.example.healthmonitoring.internal.supervisor.service;
 import com.example.healthmonitoring.common.domain.entity.*;
 import com.example.healthmonitoring.common.domain.entity.utility.*;
 import com.example.healthmonitoring.common.domain.repository.*;
+import com.example.healthmonitoring.internal.supervisor.dto.EditPatientDTO;
 import com.example.healthmonitoring.internal.supervisor.dto.PatientDTO;
 import com.example.healthmonitoring.internal.supervisor.dto.ReportDTO;
 import com.example.healthmonitoring.internal.supervisor.dto.SupervisorDTO;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -59,12 +61,7 @@ public class SupervisorService {
         return patientRepository
                 .getDataFromMaterializedView(principal.getId())
                 .flatMap(this::addAlerts)
-                .sort(new Comparator<PatientVitalSignsData>() {
-                    @Override
-                    public int compare(PatientVitalSignsData o1, PatientVitalSignsData o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
+                .sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
     }
 
     public Flux<ReportDTO> getReportsForDate(@NotNull LocalDate date, @NotNull SupervisorDTO principal) {
@@ -77,12 +74,7 @@ public class SupervisorService {
                         .thenReturn(Mono.just(Boolean.TRUE))
                 )
                 .flatMap(res -> Flux.fromStream(reportDTOStream.stream()))
-                .sort(new Comparator<ReportDTO>() {
-                    @Override
-                    public int compare(ReportDTO o1, ReportDTO o2) {
-                        return o1.getFullName().compareTo(o2.getFullName());
-                    }
-                });
+                .sort((o1, o2) -> o1.getFullName().compareTo(o2.getFullName()));
     }
 
     public Mono<PatientDetailsDTO> getPatientDetails(@NotNull UUID patientId) {
@@ -91,14 +83,41 @@ public class SupervisorService {
                 .flatMap(this::addRecentData);
     }
 
+    public Mono<Void> editPatientDetails(@NotNull EditPatientDTO patientDetails) {
+        return patientRepository.findById(patientDetails.getPatientId())
+                .map(patient -> patient.toBuilder()
+                        .email(patientDetails.getPatientEmail())
+                        .phoneNumber(patientDetails.getPatientPhoneNumber())
+                        .homeAddress(patientDetails.getPatientHomeAddress())
+                        .build())
+                .flatMap(patientRepository::save)
+                .then(deviceRepository.findById(patientDetails.getDeviceId()))
+                .map(device -> device.toBuilder()
+                        .brand(patientDetails.getDeviceBrand())
+                        .model(patientDetails.getDeviceModel())
+                        .imei(patientDetails.getDeviceIMEI())
+                        .build())
+                .flatMap(deviceRepository::save)
+                .then(medicalRecordRepository.findByPatient(patientDetails.getPatientId()))
+                .map(medicalRecord -> medicalRecord.toBuilder()
+                        .diseases(patientDetails.getDiseases())
+                        .treatments(patientDetails.getTreatments())
+                        .details(patientDetails.getOtherDetails())
+                        .build())
+                .flatMap(medicalRecordRepository::save)
+                .then(emergencyContactRepository.findByPatient(patientDetails.getPatientId()))
+                .map(emergencyContact -> emergencyContact.toBuilder()
+                        .name(patientDetails.getEmergencyContactFullName())
+                        .phoneNumber(patientDetails.getEmergencyContactPhoneNumber())
+                        .relationship(patientDetails.getEmergencyContactRelationship())
+                        .build())
+                .flatMap(emergencyContactRepository::save)
+                .then();
+    }
+
     private Mono<PatientDetailsDTO> addRecentData(PatientDetailsDTO data) {
         return eventRepository.getRecentEventsForPatient(data.getPatientId())
-                .sort(new Comparator<Event>() {
-                    @Override
-                    public int compare(Event o1, Event o2) {
-                        return o2.getCreatedAt().compareTo(o1.getCreatedAt());
-                    }
-                })
+                .sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()))
                 .collectList()
                 .map(events -> data.toBuilder().recentData(events).build());
     }
@@ -405,6 +424,7 @@ public class SupervisorService {
 
     private Mono<Patient> persistDetails(Patient patient, PatientDTO patientDTO) {
         return Mono.just(patient)
+                .publishOn(Schedulers.boundedElastic())
                 .doOnNext(p -> {
                             log.info("Saving medical records for {}", patient);
                             medicalRecordRepository.save(
