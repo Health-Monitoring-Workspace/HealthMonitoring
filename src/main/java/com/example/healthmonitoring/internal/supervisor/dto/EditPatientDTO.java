@@ -1,32 +1,21 @@
-package com.example.healthmonitoring.common.domain.entity.utility;
+package com.example.healthmonitoring.internal.supervisor.dto;
 
-import com.example.healthmonitoring.common.domain.entity.Event;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Builder(toBuilder = true)
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@ToString
-public class PatientDetailsDTO {
+public class EditPatientDTO {
 
     @NotNull
     UUID patientId;
-
-    @NotNull
-    @NotBlank
-    String patientFullName;
 
     @NotNull
     @NotBlank
@@ -38,23 +27,14 @@ public class PatientDetailsDTO {
 
     @NotNull
     @NotBlank
-    String patientCNP;
-
-    @NotNull
-    @NotBlank
     String patientHomeAddress;
-
-    LocalDate patientBirthDate;
-
-    @NotNull
-    Integer patientAge;
 
     @NotNull
     UUID deviceId;
 
     @NotNull
     @NotBlank
-    String deviceImei;
+    String deviceIMEI;
 
     String deviceBrand;
 
@@ -76,19 +56,4 @@ public class PatientDetailsDTO {
 
     String emergencyContactRelationship;
 
-    Boolean isOnline;
-
-    LocalDateTime lastSeen;
-
-    String pulseRate;
-
-    String oxygenLevel;
-
-    String bloodPressure;
-
-    String bodyTemperature;
-
-    List<Alert> alerts;
-
-    List<Event> recentData;
 }
