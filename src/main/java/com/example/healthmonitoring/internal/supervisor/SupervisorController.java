@@ -69,4 +69,17 @@ public class SupervisorController {
         return supervisorService.deletePatient(id)
                 .thenReturn("redirect:/dashboard");
     }
+
+    @GetMapping("/profile")
+    public Mono<String> supervisorProfile(final Model model) {
+        return supervisorService.supervisorProfile(AuthenticationUtils.getLoggedInUser().getId())
+                .map(supervisor -> model.addAttribute("supervisor", supervisor))
+                .thenReturn("supervisor/supervisorprofile");
+    }
+
+    @GetMapping("/about")
+    public Mono<String> aboutPage(final Model model) {
+        return Mono.just("general/about");
+    }
+
 }

@@ -552,3 +552,60 @@ table {
     color: #f2f2f2;
     margin: 0;
 }
+
+.box-supervisor-page {
+    width: 50%;
+    block-size: fit-content;
+    background: #FFFFFF;
+    padding: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: block;
+    align-items: stretch;
+    justify-content: space-between;
+    margin: 50px auto;
+}
+
+.box-supervisor-page div {
+    height: auto;
+}
+
+.box-supervisor-page .form {
+    overflow: auto;
+}
+
+.box-supervisor-page .form h5 {
+    font-size: 4vmax;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.supervisor-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+}
+
+.box-supervisor-page .form input {
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #B0B3B9;
+    font-size: 1vmax;
+}
+
+.about-page {
+    position: center;
+    /*width: 80%;*/
+    width: fit-content;
+    block-size: fit-content;
+    background: #FFFFFF;
+    padding: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: block;
+    align-items: stretch;
+    justify-content: space-between;
+    margin: 40px;
+}
