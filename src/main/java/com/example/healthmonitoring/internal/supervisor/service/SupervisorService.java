@@ -1,9 +1,6 @@
 package com.example.healthmonitoring.internal.supervisor.service;
 
-import com.example.healthmonitoring.common.domain.entity.Device;
-import com.example.healthmonitoring.common.domain.entity.EmergencyContact;
-import com.example.healthmonitoring.common.domain.entity.MedicalRecord;
-import com.example.healthmonitoring.common.domain.entity.Patient;
+import com.example.healthmonitoring.common.domain.entity.*;
 import com.example.healthmonitoring.common.domain.entity.utility.*;
 import com.example.healthmonitoring.common.domain.repository.*;
 import com.example.healthmonitoring.internal.supervisor.dto.EditPatientDTO;
@@ -30,6 +27,8 @@ import java.util.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SupervisorService {
+
+    SupervisorRepository supervisorRepository;
 
     PatientRepository patientRepository;
 
@@ -127,6 +126,10 @@ public class SupervisorService {
                 .then(deviceRepository.deleteByPatient(patientId))
                 .then(patientRepository.deleteById(patientId))
                 .then();
+    }
+
+    public Mono<Supervisor> supervisorProfile(@NotNull UUID supervisorId) {
+        return supervisorRepository.findById(supervisorId);
     }
 
     private Mono<PatientDetailsDTO> addRecentData(PatientDetailsDTO data) {
