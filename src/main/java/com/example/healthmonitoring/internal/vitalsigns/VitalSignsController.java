@@ -1,6 +1,5 @@
 package com.example.healthmonitoring.internal.vitalsigns;
 
-import com.example.healthmonitoring.internal.supervisor.service.SupervisorService;
 import com.example.healthmonitoring.internal.vitalsigns.dto.VitalSignsDTO;
 import com.example.healthmonitoring.internal.vitalsigns.service.VitalSignsService;
 import lombok.AccessLevel;
@@ -20,30 +19,11 @@ import reactor.core.publisher.Mono;
 public class VitalSignsController {
 
     VitalSignsService vitalSignsService;
-//    SupervisorService supervisorService;
 
     @PostMapping(value = "/vital-signs", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Mono<Void> ingestVitalSigns(@RequestBody VitalSignsDTO vitalSignsDTO) {
         log.info("Trying to ingest vitals {}", vitalSignsDTO);
         return vitalSignsService.persistVitalSigns(vitalSignsDTO);
     }
-
-//    @GetMapping("/patients")
-//    public Flux<PatientVitalSignsData> patientVitalSignsDataFlux() {
-//        log.info("Returning patients' data for supervisor {}", AuthenticationUtils.getLoggedInUser().getId());
-//        return supervisorService.getPatientsData(AuthenticationUtils.getLoggedInUser());
-//    }
-//
-//    @GetMapping("/reports")
-//    public Flux<ReportDTO> reportDTOFlux() {
-//        log.info("Returning patients' data for supervisor {}", AuthenticationUtils.getLoggedInUser().getId());
-//        return supervisorService.getReportsForDate(LocalDate.of(2022, 3, 10), AuthenticationUtils.getLoggedInUser()).distinct();
-//    }
-//
-//    @PostMapping(value = "/vs", consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public Mono<Void> voidMono(@RequestBody Integer string) {
-//        System.out.println(string);
-//        return Mono.just(string).then();
-//    }
 
 }

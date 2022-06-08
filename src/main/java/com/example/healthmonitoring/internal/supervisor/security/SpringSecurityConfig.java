@@ -62,7 +62,7 @@ public class SpringSecurityConfig {
                 .and()
                 .authorizeExchange()
                 .pathMatchers("/resources/**", "/css/**", "/images/**", "/js/**").permitAll()
-                .pathMatchers("/login", "/about").permitAll()
+                .pathMatchers("/login", "/about", "/vital-signs").permitAll()
                 .pathMatchers("/**").authenticated()
                 .anyExchange()
                 .permitAll()// Except for protected paths above, the rest will be open
