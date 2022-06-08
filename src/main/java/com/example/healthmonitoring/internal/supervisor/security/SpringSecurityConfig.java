@@ -33,7 +33,7 @@ public class SpringSecurityConfig {
         return http
                 .csrf().disable()
                 .formLogin()
-                .loginPage("/login.html")
+                .loginPage("/login")
                 .and()
                 .logout()
                 .logoutUrl("/logout")

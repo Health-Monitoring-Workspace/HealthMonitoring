@@ -37,7 +37,7 @@ public class SupervisorController {
 
     @GetMapping("/login")
     public Mono<String> redirectLogin(Model model) {
-        return Mono.just("general/login");
+        return Mono.just("login");
     }
 
     @GetMapping("/add-patient")
@@ -49,11 +49,6 @@ public class SupervisorController {
 
     @PostMapping("/add-patient")
     public Mono<String> addPatientSubmission(@ModelAttribute("patientForm") PatientDTO patientDTO, Model model) {
-//        if (result.hasErrors()) {
-//            model.addAttribute("patientForm", PatientDTO.builder().build());
-//
-//            return Mono.just("addPatientPage/add-patient");
-//        }
         return supervisorService.addPatient(patientDTO, AuthenticationUtils.getLoggedInUser())
                 .thenReturn("addPatientPage/add-patient");
     }
