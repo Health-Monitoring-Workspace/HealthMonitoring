@@ -29,15 +29,19 @@ public class DashboardController {
 
     @GetMapping("")
     public Mono<String> getDefault(Model model) {
-        return supervisorService.getPatientsData(AuthenticationUtils.getLoggedInUser())
+        return AuthenticationUtils.getLoggedInUser()
+                .flatMapMany(supervisorService::getPatientsData)
                 .collectList()
                 .map(patients -> model.addAttribute("patients", patients))
                 .then(Mono.just("dashboard/patientcard"));
     }
 
+
     @GetMapping("reports")
     public Mono<String> getReportsForDate(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date, final Model model) {
-        return supervisorService.getReportsForDate(date == null ? LocalDate.now().minusDays(1) : date, AuthenticationUtils.getLoggedInUser()).distinct()
+        return AuthenticationUtils.getLoggedInUser()
+                .flatMapMany(user ->
+                        supervisorService.getReportsForDate(date == null ? LocalDate.now().minusDays(1) : date, user).distinct())
                 .collectList()
                 .map(reportDTOS -> {
                     model.addAttribute("reports", reportDTOS);

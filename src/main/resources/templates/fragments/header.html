@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>HealthMO</title>
@@ -27,12 +27,15 @@
 </head>
 <body>
 <div th:fragment="header">
-        <a th:href="@{/dashboard}">Home</a>
-        <a th:href="@{/dashboard/reports}">Reports</a>
-        <a th:href="@{/profile}">My profile</a>
-        <a th:href="@{/add-patient}">Add a patient</a>
-        <a th:href="@{/about}">About</a>
-        <p>HealthMO</p>
+    <a th:href="@{/dashboard}">Home</a>
+    <a th:href="@{/dashboard/reports}">Reports</a>
+    <a th:href="@{/profile}">My profile</a>
+    <a th:href="@{/add-patient}">Add a patient</a>
+    <a th:href="@{/about}">About</a>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" ><i class="fa fa-sign-out" aria-hidden="true"></i></button>
+    </form>
+    <p>HealthMO</p>
 </div>
 
 </body>
