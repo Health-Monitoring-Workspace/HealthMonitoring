@@ -541,6 +541,21 @@ table {
     color: black;
 }
 
+.topnav button {
+    float: left;
+    color: #f2f2f2;
+    background-color: #5AA7A7;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    border: none;
+}
+
+.topnav button:hover {
+    color: black;
+}
+
 .topnav p {
     float: right;
     text-align: center;

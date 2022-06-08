@@ -1,16 +1,27 @@
 package com.example.healthmonitoring.internal.supervisor.security.utils;
 
+import com.example.healthmonitoring.common.domain.entity.Credentials;
 import com.example.healthmonitoring.internal.supervisor.dto.SupervisorDTO;
 import lombok.experimental.UtilityClass;
-
-import java.util.UUID;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
+import reactor.core.publisher.Mono;
 
 @UtilityClass
 public class AuthenticationUtils {
 
-    public static SupervisorDTO getLoggedInUser() {
-        SupervisorDTO supervisorDTO = new SupervisorDTO();
-        supervisorDTO.setId(UUID.fromString("1488ad1e-987f-11ec-b909-0242ac120002"));
-        return supervisorDTO;
+    public static Mono<SupervisorDTO> getLoggedInUser() {
+        return ReactiveSecurityContextHolder.getContext()
+                .map(SecurityContext::getAuthentication)
+                .map(authentication -> {
+                    if (authentication != null) {
+                        SupervisorDTO supervisorDTO = new SupervisorDTO();
+                        Credentials credentials = (Credentials) authentication.getPrincipal();
+                        supervisorDTO.setId(credentials.getSupervisorId());
+                        return supervisorDTO;
+                    }
+                    return new SupervisorDTO();
+                });
     }
 }

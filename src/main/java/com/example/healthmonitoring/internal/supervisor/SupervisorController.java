@@ -8,6 +8,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,16 +30,19 @@ public class SupervisorController {
 
     @GetMapping("/")
     public Mono<String> login() {
-        log.info("Enter login with {}", AuthenticationUtils.getLoggedInUser().getId());
-        if (AuthenticationUtils.getLoggedInUser().getId() != null) {
-            return Mono.just("redirect:/dashboard");
-        }
-        return Mono.just("general/login");
+        return ReactiveSecurityContextHolder.getContext()
+                .map(SecurityContext::getAuthentication)
+                .map(authentication -> {
+                    if (authentication != null) {
+                        return "redirect:/dashboard";
+                    }
+                    return "login";
+                });
     }
 
     @GetMapping("/login")
     public Mono<String> redirectLogin(Model model) {
-        return Mono.just("general/login");
+        return Mono.just("login");
     }
 
     @GetMapping("/add-patient")
@@ -49,12 +54,9 @@ public class SupervisorController {
 
     @PostMapping("/add-patient")
     public Mono<String> addPatientSubmission(@ModelAttribute("patientForm") PatientDTO patientDTO, Model model) {
-//        if (result.hasErrors()) {
-//            model.addAttribute("patientForm", PatientDTO.builder().build());
-//
-//            return Mono.just("addPatientPage/add-patient");
-//        }
-        return supervisorService.addPatient(patientDTO, AuthenticationUtils.getLoggedInUser())
+        return AuthenticationUtils.getLoggedInUser()
+                .flatMap(user ->
+                        supervisorService.addPatient(patientDTO, user))
                 .thenReturn("addPatientPage/add-patient");
     }
 
@@ -72,7 +74,9 @@ public class SupervisorController {
 
     @GetMapping("/profile")
     public Mono<String> supervisorProfile(final Model model) {
-        return supervisorService.supervisorProfile(AuthenticationUtils.getLoggedInUser().getId())
+        return AuthenticationUtils.getLoggedInUser()
+                .flatMap(user ->
+                        supervisorService.supervisorProfile(user.getId()))
                 .map(supervisor -> model.addAttribute("supervisor", supervisor))
                 .thenReturn("supervisor/supervisorprofile");
     }
