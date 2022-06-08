@@ -197,7 +197,7 @@ public class SupervisorService {
                             .build()
             );
         } else {
-            if (Double.parseDouble(data.getBodyTemperature()) > 37.2) {
+            if (Double.parseDouble(data.getBodyTemperature()) > 39.0) {
                 alerts.add(
                         Alert.builder()
                                 .alertType(AlertType.BODY_TEMPERATURE)
@@ -205,11 +205,27 @@ public class SupervisorService {
                                 .message("Body temperature is too high.")
                                 .build()
                 );
-            } else if (Double.parseDouble(data.getBodyTemperature()) < 36.5) {
+            } else if (Double.parseDouble(data.getBodyTemperature()) > 37.2) {
+                alerts.add(
+                        Alert.builder()
+                                .alertType(AlertType.BODY_TEMPERATURE)
+                                .gravity(Gravity.MEDIUM)
+                                .message("Body temperature is too high.")
+                                .build()
+                );
+            } else if (Double.parseDouble(data.getBodyTemperature()) < 32.5) {
                 alerts.add(
                         Alert.builder()
                                 .alertType(AlertType.BODY_TEMPERATURE)
                                 .gravity(Gravity.HIGH)
+                                .message("Body temperature is too low.")
+                                .build()
+                );
+            } else if (Double.parseDouble(data.getBodyTemperature()) < 36.5) {
+                alerts.add(
+                        Alert.builder()
+                                .alertType(AlertType.BODY_TEMPERATURE)
+                                .gravity(Gravity.MEDIUM)
                                 .message("Body temperature is too low.")
                                 .build()
                 );
@@ -239,19 +255,19 @@ public class SupervisorService {
                     alerts.add(
                             Alert.builder()
                                     .alertType(AlertType.BLOOD_PRESSURE)
-                                    .gravity(Gravity.MEDIUM)
+                                    .gravity(Gravity.LOW)
                                     .message("Blood pressure is elevated.")
                                     .build()
                     );
-                } else if ((systolic >= 130 && systolic <= 139) && (diastolic >= 80 && diastolic <= 89)) {
+                } else if ((systolic >= 130 && systolic <= 139) || (diastolic >= 80 && diastolic <= 89)) {
                     alerts.add(
                             Alert.builder()
                                     .alertType(AlertType.BLOOD_PRESSURE)
-                                    .gravity(Gravity.HIGH)
+                                    .gravity(Gravity.MEDIUM)
                                     .message("Blood pressure is in stage 1.")
                                     .build()
                     );
-                } else if ((systolic >= 140) || (diastolic >= 90)) {
+                } else {
                     alerts.add(
                             Alert.builder()
                                     .alertType(AlertType.BLOOD_PRESSURE)
@@ -275,11 +291,27 @@ public class SupervisorService {
             );
         } else {
             int oxygenLevel = Integer.parseInt(data.getOxygenLevel());
-            if (oxygenLevel < 90) {
+            if (oxygenLevel < 70) {
                 alerts.add(
                         Alert.builder()
                                 .alertType(AlertType.OXYGEN_IN_BLOOD)
                                 .gravity(Gravity.HIGH)
+                                .message("Oxygen level is low.")
+                                .build()
+                );
+            } else if (oxygenLevel < 80) {
+                alerts.add(
+                        Alert.builder()
+                                .alertType(AlertType.OXYGEN_IN_BLOOD)
+                                .gravity(Gravity.MEDIUM)
+                                .message("Oxygen level is low.")
+                                .build()
+                );
+            } else if (oxygenLevel < 90) {
+                alerts.add(
+                        Alert.builder()
+                                .alertType(AlertType.OXYGEN_IN_BLOOD)
+                                .gravity(Gravity.LOW)
                                 .message("Oxygen level is low.")
                                 .build()
                 );
@@ -347,7 +379,7 @@ public class SupervisorService {
                             .build()
             );
         } else {
-            if (Double.parseDouble(data.getBodyTemperature()) > 37.2) {
+            if (Double.parseDouble(data.getBodyTemperature()) > 39.0) {
                 alerts.add(
                         Alert.builder()
                                 .alertType(AlertType.BODY_TEMPERATURE)
@@ -355,11 +387,27 @@ public class SupervisorService {
                                 .message("Body temperature is too high.")
                                 .build()
                 );
-            } else if (Double.parseDouble(data.getBodyTemperature()) < 36.5) {
+            } else if (Double.parseDouble(data.getBodyTemperature()) > 37.2) {
+                alerts.add(
+                        Alert.builder()
+                                .alertType(AlertType.BODY_TEMPERATURE)
+                                .gravity(Gravity.MEDIUM)
+                                .message("Body temperature is too high.")
+                                .build()
+                );
+            } else if (Double.parseDouble(data.getBodyTemperature()) < 32.5) {
                 alerts.add(
                         Alert.builder()
                                 .alertType(AlertType.BODY_TEMPERATURE)
                                 .gravity(Gravity.HIGH)
+                                .message("Body temperature is too low.")
+                                .build()
+                );
+            } else if (Double.parseDouble(data.getBodyTemperature()) < 36.5) {
+                alerts.add(
+                        Alert.builder()
+                                .alertType(AlertType.BODY_TEMPERATURE)
+                                .gravity(Gravity.MEDIUM)
                                 .message("Body temperature is too low.")
                                 .build()
                 );
@@ -389,19 +437,19 @@ public class SupervisorService {
                     alerts.add(
                             Alert.builder()
                                     .alertType(AlertType.BLOOD_PRESSURE)
-                                    .gravity(Gravity.MEDIUM)
+                                    .gravity(Gravity.LOW)
                                     .message("Blood pressure is elevated.")
                                     .build()
                     );
-                } else if ((systolic >= 130 && systolic <= 139) && (diastolic >= 80 && diastolic <= 89)) {
+                } else if ((systolic >= 130 && systolic <= 139) || (diastolic >= 80 && diastolic <= 89)) {
                     alerts.add(
                             Alert.builder()
                                     .alertType(AlertType.BLOOD_PRESSURE)
-                                    .gravity(Gravity.HIGH)
+                                    .gravity(Gravity.MEDIUM)
                                     .message("Blood pressure is in stage 1.")
                                     .build()
                     );
-                } else if ((systolic >= 140) || (diastolic >= 90)) {
+                } else {
                     alerts.add(
                             Alert.builder()
                                     .alertType(AlertType.BLOOD_PRESSURE)
@@ -425,11 +473,27 @@ public class SupervisorService {
             );
         } else {
             int oxygenLevel = Integer.parseInt(data.getOxygenLevel());
-            if (oxygenLevel < 90) {
+            if (oxygenLevel < 70) {
                 alerts.add(
                         Alert.builder()
                                 .alertType(AlertType.OXYGEN_IN_BLOOD)
                                 .gravity(Gravity.HIGH)
+                                .message("Oxygen level is low.")
+                                .build()
+                );
+            } else if (oxygenLevel < 80) {
+                alerts.add(
+                        Alert.builder()
+                                .alertType(AlertType.OXYGEN_IN_BLOOD)
+                                .gravity(Gravity.MEDIUM)
+                                .message("Oxygen level is low.")
+                                .build()
+                );
+            } else if (oxygenLevel < 90) {
+                alerts.add(
+                        Alert.builder()
+                                .alertType(AlertType.OXYGEN_IN_BLOOD)
+                                .gravity(Gravity.LOW)
                                 .message("Oxygen level is low.")
                                 .build()
                 );
@@ -438,6 +502,7 @@ public class SupervisorService {
 
         return Mono.just(data.toBuilder().alerts(alerts).build());
     }
+
 
     private Mono<Patient> persistDetails(Patient patient, PatientDTO patientDTO) {
         return Mono.just(patient)

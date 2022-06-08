@@ -72,8 +72,6 @@ public class SpringSecurityConfig {
                         exceptions -> exceptions
                                 .authenticationEntryPoint(new RedirectServerAuthenticationEntryPoint("/login"))
                 )
-                // .accessDeniedPage("/403.html");
-//                .and()
                 .build();
 
     }
