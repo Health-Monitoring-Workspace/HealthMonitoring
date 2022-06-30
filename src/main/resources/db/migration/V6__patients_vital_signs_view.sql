@@ -33,7 +33,7 @@ from (select distinct on (device_id) device_id, data
                     from events
                     order by device_id, created_at desc) as lastseen on lastseen.device_id = pulse.device_id
          inner join devices dev on pulse.device_id = dev.id
-         inner join patients p on dev.patient = p.id
+         right join patients p on dev.patient = p.id
          inner join supervisors s on s.id = p.supervisor;
 
 

@@ -623,3 +623,27 @@ table {
     justify-content: space-between;
     margin: 40px;
 }
+
+.my-patients-page{
+    position: center;
+    /*width: 80%;*/
+    block-size: fit-content;
+    background: #FFFFFF;
+    padding: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: block;
+    align-items: stretch;
+    justify-content: space-between;
+    margin: 40px;
+}
+
+.patients-table {
+    text-align: center;
+    font-size: 1vmax;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}

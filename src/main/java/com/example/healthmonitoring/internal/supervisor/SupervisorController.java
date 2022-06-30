@@ -86,4 +86,14 @@ public class SupervisorController {
         return Mono.just("general/about");
     }
 
+    @GetMapping("/my-patients")
+    public Mono<String> myPatients(final Model model) {
+        return AuthenticationUtils.getLoggedInUser()
+                .flatMapMany(user ->
+                        supervisorService.findAllBySupervisor(user.getId()))
+                .collectList()
+                .map(patients -> model.addAttribute("patients", patients))
+                .thenReturn("patients/my-patients");
+    }
+
 }

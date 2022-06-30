@@ -59,7 +59,7 @@ from (select distinct
                     from events
                     order by device_id, created_at desc) as lastseen on lastseen.device_id = pulse.device_id
          inner join devices dev on pulse.device_id = dev.id
-         inner join patients p on dev.patient = p.id
+         right join patients p on dev.patient = p.id
          inner join medical_records mr on p.id = mr.patient
          inner join emergency_contacts ec on p.id = ec.patient
          inner join supervisors s on s.id = p.supervisor;

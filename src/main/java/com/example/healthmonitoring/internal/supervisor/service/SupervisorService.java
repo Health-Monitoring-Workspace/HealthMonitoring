@@ -132,6 +132,10 @@ public class SupervisorService {
         return supervisorRepository.findById(supervisorId);
     }
 
+    public Flux<Patient> findAllBySupervisor(@NotNull UUID supervisorId) {
+        return patientRepository.findAllBySupervisor(supervisorId);
+    }
+
     private Mono<PatientDetailsDTO> addRecentData(PatientDetailsDTO data) {
         return eventRepository.getRecentEventsForPatient(data.getPatientId())
                 .sort((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()))

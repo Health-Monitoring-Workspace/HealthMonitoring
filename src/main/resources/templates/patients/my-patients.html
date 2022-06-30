@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>HealthMO</title>
@@ -24,19 +24,37 @@
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css"/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+
 </head>
 <body>
-<div th:fragment="header">
-    <a th:href="@{/dashboard}">Home</a>
-    <a th:href="@{/dashboard/reports}">Reports</a>
-    <a th:href="@{/profile}">My profile</a>
-    <a th:href="@{/add-patient}">Add a patient</a>
-    <a th:href="@{/my-patients}">My patients</a>
-    <a th:href="@{/about}">About</a>
-    <form th:action="@{/logout}" method="post">
-        <button type="submit" ><i class="fa fa-sign-out" aria-hidden="true"></i></button>
-    </form>
-    <p>HealthMO</p>
+<div th:include="fragments/header :: header" class="topnav"></div>
+<div class="my-patients-page">
+    <table class="patients-table">
+        <thead>
+        <tr>
+            <th>Full name</th>
+            <th>Birth date</th>
+            <th>Email</th>
+            <th>Phone number</th>
+            <th>Info</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${patients.empty}">
+            <td colspan="3"> No data available.</td>
+        </tr>
+        <tr th:each="patient:${patients}">
+            <td th:text="${patient.getName()}"></td>
+            <td th:text="${patient.getBirthDate()}"></td>
+            <td th:text="${patient.getEmail()}"></td>
+            <td th:text="${patient.getPhoneNumber()}"></td>
+            <td><a th:href="@{/dashboard/patients/{id}(id=${patient.getId()})}"> <i class="fa fa-info-circle"
+                                                                                        aria-hidden="true"></i></a></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 </body>
