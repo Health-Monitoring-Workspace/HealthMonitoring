@@ -20,7 +20,7 @@ BEGIN
     insert into reports(date, vital_sign_type, mean, patient)
     select selected_date,
            'PULSE',
-           avg(e.data::integer)::double precision as data,
+           round(avg(e.data::double precision)) as data,
            p.id                 as patient
     from events e
              inner join devices d on d.id = e.device_id
@@ -34,7 +34,7 @@ BEGIN
     insert into reports(date, vital_sign_type, mean, patient)
     select selected_date,
            'OXYGEN_IN_BLOOD',
-           avg(e.data::integer)::double precision as data,
+           round(avg(e.data::integer)::double precision) as data,
            p.id                 as patient
     from events e
              inner join devices d on d.id = e.device_id
@@ -48,7 +48,7 @@ BEGIN
     insert into reports(date, vital_sign_type, mean, patient)
     select selected_date,
            'BODY_TEMPERATURE',
-           avg(e.data::integer) as data,
+           round(avg(e.data::double precision)) as data,
            p.id                 as patient
     from events e
              inner join devices d on d.id = e.device_id
